@@ -1,4 +1,4 @@
-package cn.zay.demo.pojo;
+package cn.zay.demo.java.pojo;
 
 /**
  * @author ZAY
