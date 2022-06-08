@@ -42,8 +42,8 @@ public class HttpServer {
                         protected void initChannel(SocketChannel ch) {
                             ch.pipeline().addLast("decoder", new HttpRequestDecoder())
                                     .addLast("encoder", new HttpResponseEncoder())
-                                    .addLast("aggregator", new HttpObjectAggregator(512 * 1024))
-                                    .addLast("handler", new HttpServerHandler());
+                                    .addLast("aggregator", new HttpObjectAggregator(512 * 1024));
+                                    //.addLast("handler", new HttpServerHandler());
                         }
                     });
             Channel ch = b.bind(PORT).sync().channel();
