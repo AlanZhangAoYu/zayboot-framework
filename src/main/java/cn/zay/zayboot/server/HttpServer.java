@@ -14,13 +14,11 @@ import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author shuang.kou
  * @createTime 2020年09月23日 17:05:00
  **/
-@Slf4j
 public class HttpServer {
     private static final int PORT = 8080;
     public void start() {
@@ -47,12 +45,12 @@ public class HttpServer {
                         }
                     });
             Channel ch = b.bind(PORT).sync().channel();
-            log.info(SystemConstants.LOG_PORT_BANNER, PORT);
+            //log.info(SystemConstants.LOG_PORT_BANNER, PORT);
             ch.closeFuture().sync();
         } catch (InterruptedException e) {
-            log.error("occur com.github.jsoncat.exception when start com.github.jsoncat.server:", e);
+            //log.error("occur com.github.jsoncat.exception when start com.github.jsoncat.server:", e);
         } finally {
-            log.error("shutdown bossGroup and workerGroup");
+            //log.error("shutdown bossGroup and workerGroup");
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
