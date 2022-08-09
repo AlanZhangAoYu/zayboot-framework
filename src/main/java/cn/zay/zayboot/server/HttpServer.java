@@ -5,14 +5,16 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author ZAY
  **/
+@Slf4j
 public class HttpServer {
     private static final int PORT = 8080;
     public static void main(String[] args) throws Exception{
-        //创建两个线程组 boosGroup、workerGroup
+        //创建两个线程组 bossGroup、workerGroup
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -34,7 +36,7 @@ public class HttpServer {
                             socketChannel.pipeline().addLast(new HttpServerHandler());
                         }
                     });//给workerGroup的EventLoop对应的管道设置处理器
-            System.out.println("服务端已经准备就绪...");
+            log.info("服务端已经准备就绪...");
             //绑定端口号，启动服务端
             ChannelFuture channelFuture = bootstrap.bind(PORT).sync();
             //对关闭通道进行监听

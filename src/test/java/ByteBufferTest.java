@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
@@ -6,7 +7,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 public class ByteBufferTest {
     private static final Logger logger= LoggerFactory.getLogger(ByteBufferTest.class);
-    public static void main(String[] args) {
+    @Test
+    public void test1() {
         try {
             //FileChannel 数据的读取通道
             FileChannel channel = new FileInputStream("README.md").getChannel();

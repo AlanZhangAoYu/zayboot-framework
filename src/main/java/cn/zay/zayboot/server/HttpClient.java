@@ -6,9 +6,12 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author ZAY
  */
+@Slf4j
 public class HttpClient {
     public static void main(String[] args) throws Exception {
         NioEventLoopGroup eventExecutors = new NioEventLoopGroup();
@@ -27,7 +30,7 @@ public class HttpClient {
                             ch.pipeline().addLast(new HttpClientHandler());
                         }
                     });
-            System.out.println("客户端准备就绪");
+            log.info("客户端准备就绪");
             //连接服务端
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8080).sync();
             //对通道关闭进行监听
