@@ -7,7 +7,7 @@ import java.time.format.FormatStyle;
 import java.util.Locale;
 
 /**
- * @author shuang.kou
+ * @author ZAY
  * @createTime 2020年09月26日 10:42:00
  **/
 public class DateUtil {
