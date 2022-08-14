@@ -11,7 +11,8 @@ import java.util.Set;
 
 /**
  * 常见的反射方法
- **/
+ * @author ZAY
+ */
 @Slf4j
 public class ReflectionUtil {
     /**
@@ -23,7 +24,7 @@ public class ReflectionUtil {
     public static Set<Class<?>> scanAnnotatedClass(String[] packageNames, Class<? extends Annotation> annotation) {
         Reflections reflections = new Reflections(packageNames, new TypeAnnotationsScanner());
         Set<Class<?>> annotatedClass = reflections.getTypesAnnotatedWith(annotation, true);
-        log.info("由@" + annotation.getSimpleName() + "注释的类的数量为:[{}]", annotatedClass.size());
+        log.info("由@{}注释的类的数量为:[{}]",annotation.getSimpleName(),annotatedClass.size());
         return annotatedClass;
     }
     /**
@@ -74,10 +75,8 @@ public class ReflectionUtil {
     public static Object executeTargetMethod(Object targetObject, Method method, Object... args) {
         try {
             return method.invoke(targetObject, args);
-        } catch (Throwable t) {
-            if (t.getCause() != null) {
-                log.error("异常:[{}]",t.getCause().toString());
-            }
+        } catch (Exception e) {
+            log.error("异常:[{}]",e.getMessage());
         }
         return null;
     }
