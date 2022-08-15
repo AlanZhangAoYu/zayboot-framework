@@ -3,7 +3,7 @@ package cn.zay.demo.java.pojo;
 import cn.zay.zayboot.annotation.ioc.Autowired;
 import cn.zay.zayboot.annotation.ioc.Component;
 
-@Component(name = "studentAutowired")
+@Component
 public class StudentAutowired {
     @Autowired
     Student ZAY;

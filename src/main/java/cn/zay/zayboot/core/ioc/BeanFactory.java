@@ -3,6 +3,8 @@ package cn.zay.zayboot.core.ioc;
 import cn.zay.zayboot.annotation.ioc.Component;
 import cn.zay.zayboot.exception.NoSuchBeanDefinitionException;
 import cn.zay.zayboot.util.ReflectionUtil;
+import cn.zay.zayboot.util.StringUtil;
+
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +47,7 @@ public final class BeanFactory {
     }
 
     /**
-     * 获取指定类的 bean名称,如果其被 @Component注释，就获取注解中的 name
+     * 获取指定类的 bean名称(用作 BEANS中的 key),如果其被 @Component注释，就获取注解中的 name
      * @param aClass 指定的目标类
      * @return bean名称
      */
@@ -54,8 +56,8 @@ public final class BeanFactory {
         //判断该类有没有被 @Component注释
         if (aClass.isAnnotationPresent(Component.class)) {
             Component component = aClass.getAnnotation(Component.class);
-            //如果 @Component后没有设置bean名称,就用类的名字; 设置了name就用name
-            beanName = "".equals(component.name()) ? aClass.getName() : component.name();
+            //如果 @Component后没有设置bean名称,就用类名的首字母小写; 设置了name就用name
+            beanName = "".equals(component.name()) ? StringUtil.lowercaseInitials(StringUtil.classPathToClassName(aClass.getName())) : component.name();
         }
         return beanName;
     }
