@@ -51,8 +51,10 @@ public final class BeanFactory {
      */
     public static String getBeanName(Class<?> aClass) {
         String beanName = aClass.getName();
+        //判断该类有没有被 @Component注释
         if (aClass.isAnnotationPresent(Component.class)) {
             Component component = aClass.getAnnotation(Component.class);
+            //如果 @Component后没有设置bean名称,就用类的名字; 设置了name就用name
             beanName = "".equals(component.name()) ? aClass.getName() : component.name();
         }
         return beanName;
@@ -60,14 +62,14 @@ public final class BeanFactory {
     public static <T> T getBean(Class<T> type) throws NoSuchBeanDefinitionException {
         Object bean=BEANS.get(getBeanName(type));
         if(bean == null){
-            throw new NoSuchBeanDefinitionException("未找到bean");
+            throw new NoSuchBeanDefinitionException("找不到这个bean:"+type.getName());
         }
         return type.cast(bean);
     }
     public static Object getBean(String name) throws NoSuchBeanDefinitionException {
         Object bean=BEANS.get(name);
         if(bean == null){
-            throw new NoSuchBeanDefinitionException("未找到bean");
+            throw new NoSuchBeanDefinitionException("找不到这个bean:"+name);
         }
         return bean;
     }

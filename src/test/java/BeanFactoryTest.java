@@ -1,4 +1,6 @@
 import cn.zay.demo.java.pojo.Student;
+import cn.zay.demo.java.pojo.StudentAutowired;
+import cn.zay.zayboot.core.ioc.AutowiredBeanInitialization;
 import cn.zay.zayboot.core.ioc.BeanFactory;
 import cn.zay.zayboot.exception.NoSuchBeanDefinitionException;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,19 @@ public class BeanFactoryTest {
             BeanFactory.loadBeans();
             log.debug(BeanFactory.getBean("ZAY").toString());
         } catch (NoSuchBeanDefinitionException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void test5(){
+        try {
+            BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+            BeanFactory.loadBeans();
+            StudentAutowired studentAutowired=(StudentAutowired) BeanFactory.getBean("studentAutowired");
+            AutowiredBeanInitialization autowiredBeanInitialization = new AutowiredBeanInitialization(new String[]{"cn.zay.demo.java.pojo"});
+            autowiredBeanInitialization.initialize(studentAutowired);
+            log.debug(studentAutowired.toString());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
