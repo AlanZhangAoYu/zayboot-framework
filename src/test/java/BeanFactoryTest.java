@@ -46,7 +46,7 @@ public class BeanFactoryTest {
             StudentAutowired studentAutowired=(StudentAutowired) BeanFactory.getBean("studentAutowired");
             AutowiredBeanInitialization autowiredBeanInitialization = new AutowiredBeanInitialization(new String[]{"cn.zay.demo.java.pojo"});
             autowiredBeanInitialization.initialize(studentAutowired);
-            log.debug(studentAutowired.toString());
+            studentAutowired.ZAY.sayHello();
         } catch (Exception e) {
             e.printStackTrace();
         }

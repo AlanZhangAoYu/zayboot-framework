@@ -6,7 +6,7 @@ import cn.zay.zayboot.annotation.ioc.Component;
 @Component
 public class StudentAutowired {
     @Autowired
-    Student ZAY;
+    public Student ZAY;
     @Override
     public String toString() {
         return "StudentAutowired{" +
