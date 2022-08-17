@@ -10,10 +10,14 @@ import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * @author ZAY
+ * .yml 或 .yaml 文件加载读取
+ */
 public class YamlResourceLoader extends AbstractResourceLoader{
+    //参考 https://www.cnblogs.com/xiaoqi/p/SnakeYAML.html
     @Override
     protected Map<String, String> loadResources(Path path) throws IOException {
-
         Map<String, String> result = new LinkedHashMap<>();
         InputStream stream = null;
         Reader reader = null;
@@ -50,10 +54,8 @@ public class YamlResourceLoader extends AbstractResourceLoader{
         });
     }
 
-
     private Map<String, Object> asMap(Object object) {
         Map<String, Object> result = new LinkedHashMap<>();
-
         Map<Object, Object> map = (Map<Object, Object>) object;
         map.forEach((key, value) -> {
             if (value instanceof Map) {
