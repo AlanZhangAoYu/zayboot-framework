@@ -8,7 +8,7 @@ import java.util.Map;
  * @author ZAY
  */
 public interface Configuration {
-    String[] DEFAULT_CONFIG_NAMES = {"application.properties", "application.yaml"};
+    String[] DEFAULT_CONFIG_FILENAMES = {"application.properties", "application.yaml","application.yml"};
     int getInt(String id);
     String getString(String id);
     Boolean getBoolean(String id);
