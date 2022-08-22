@@ -1,7 +1,9 @@
 package cn.zay.zayboot.core.ioc;
 
+import cn.zay.zayboot.annotation.config.Value;
 import cn.zay.zayboot.annotation.ioc.Autowired;
 import cn.zay.zayboot.annotation.ioc.Qualifier;
+import cn.zay.zayboot.core.config.ConfigurationManager;
 import cn.zay.zayboot.exception.InterfaceNotHaveImplementedClassException;
 import cn.zay.zayboot.exception.NoSuchBeanDefinitionException;
 import cn.zay.zayboot.util.ReflectionUtil;
@@ -70,5 +72,21 @@ public class AutowiredBeanInitialization {
             throw new NoSuchBeanDefinitionException("找不到这个bean:" + beanFieldClass.getName());
         }
         return beanFieldInstance;
+    }
+
+    /**
+     * 处理被 @Value 注解标记的字段
+     *
+     * @param beanField 目标类的字段
+     * @return 目标类的字段对应的对象
+     */
+    private Object processValueAnnotationField(Field beanField) {
+        String key = beanField.getDeclaredAnnotation(Value.class).value();
+        ConfigurationManager configurationManager = (ConfigurationManager) BeanFactory.BEANS.get(ConfigurationManager.class.getName());
+        String value = configurationManager.getString(key);
+        if (value == null) {
+            throw new IllegalArgumentException("can not find target value for property:{" + key + "}");
+        }
+        return ObjectUtil.convert(beanField.getType(), value);
     }
 }
