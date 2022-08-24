@@ -29,4 +29,13 @@ public class StringUtil {
         String[] strings=str.split("\\.");
         return strings[strings.length-1];
     }
+    /**
+     * 将 "#{xxx.xxx.Xxx}" 或 "${xxx.xxx.Xxx}" 转换为 "xxx.xxx.Xxx"
+     * @param str 输入的格式
+     * @return 转换后的值
+     */
+    public static String injectionFormatToValuePath(String str){
+        str=str.trim();
+        return str.substring(2,str.length()-1).trim();
+    }
 }

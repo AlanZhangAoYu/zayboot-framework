@@ -8,11 +8,11 @@ import java.beans.PropertyEditorManager;
  **/
 public class ObjectUtil {
     /**
-     * convert from String to a target type
-     *
-     * @param targetType the type to be converted
-     * @param s          the string to be converted
-     * @throws NumberFormatException When string to number, if string is not a number,then throw NumberFormatException
+     * 将字符串(一个值)转换为目标类型(用于 @Value注入)
+     * 参考: https://juejin.cn/post/6844904047074344967#hdate
+     * @param targetType 字符串要转的目标类
+     * @param s 要转换的值
+     * @throws NumberFormatException 字符串转数字时，若字符串包含非数字字符，抛出异常
      */
     public static Object convert(Class<?> targetType, String s) {
         PropertyEditor editor = PropertyEditorManager.findEditor(targetType);

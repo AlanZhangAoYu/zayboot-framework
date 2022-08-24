@@ -1,6 +1,8 @@
+import cn.zay.demo.java.pojo.Server;
 import cn.zay.zayboot.core.config.ConfigurationManager;
 import cn.zay.zayboot.core.config.loader.PropertiesResourceLoader;
 import cn.zay.zayboot.core.config.loader.YamlResourceLoader;
+import cn.zay.zayboot.core.ioc.AutowiredBeanInitialization;
 import cn.zay.zayboot.core.ioc.BeanFactory;
 import cn.zay.zayboot.exception.NoSuchBeanDefinitionException;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +53,24 @@ public class ResourceLoaderTest {
         try {
             log.debug(BeanFactory.getBean("application.yml").toString());
         } catch (NoSuchBeanDefinitionException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void valueInjectionTest(){
+        BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+        BeanFactory.loadBeans();
+        ConfigurationManager configurationManager =new ConfigurationManager();
+        List<Path> pathList=new ArrayList<>();
+        pathList.add(Paths.get("E:\\MyWork\\zayboot-framework\\src\\main\\java\\cn\\zay\\demo\\resources\\application.yml"));
+        configurationManager.loadResources(pathList);
+        try {
+            Server server=(Server) BeanFactory.getBean("server");
+            AutowiredBeanInitialization autowiredBeanInitialization = new AutowiredBeanInitialization(new String[]{"cn.zay.demo.java.pojo"});
+            autowiredBeanInitialization.initialize(server);
+            log.debug(BeanFactory.BEANS.toString());
+            log.debug(server.toString());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

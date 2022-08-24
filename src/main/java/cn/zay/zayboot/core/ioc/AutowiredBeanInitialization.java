@@ -6,14 +6,21 @@ import cn.zay.zayboot.annotation.ioc.Qualifier;
 import cn.zay.zayboot.core.config.ConfigurationManager;
 import cn.zay.zayboot.exception.InterfaceNotHaveImplementedClassException;
 import cn.zay.zayboot.exception.NoSuchBeanDefinitionException;
+import cn.zay.zayboot.exception.NotFoundTheValueCorrespondingToTheKeyException;
+import cn.zay.zayboot.util.ObjectUtil;
 import cn.zay.zayboot.util.ReflectionUtil;
+import cn.zay.zayboot.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
+
 import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * @author ZAY
  * 处理被注解 @Autowired和 @Value注释的字段
  */
+@Slf4j
 public class AutowiredBeanInitialization {
     private final String[] packageNames;
     public AutowiredBeanInitialization(String[] packageNames) {
@@ -35,6 +42,10 @@ public class AutowiredBeanInitialization {
                 if (beanField.isAnnotationPresent(Autowired.class)) {
                     Object beanFieldInstance = processAutowiredAnnotationField(beanField);
                     //String beanFieldName = BeanFactory.getBeanName(beanField.getType());
+                    ReflectionUtil.setField(beanInstance, beanField, beanFieldInstance);
+                }
+                if (beanField.isAnnotationPresent(Value.class)){
+                    Object beanFieldInstance = processValueAnnotationField(beanField);
                     ReflectionUtil.setField(beanInstance, beanField, beanFieldInstance);
                 }
             }
@@ -75,17 +86,23 @@ public class AutowiredBeanInitialization {
     }
 
     /**
-     * 处理被 @Value 注解标记的字段
-     *
+     * 根据 @Value注解的 key在配置文件中寻找对应的值, 准备注入
      * @param beanField 目标类的字段
      * @return 目标类的字段对应的对象
      */
-    private Object processValueAnnotationField(Field beanField) {
+    private Object processValueAnnotationField(Field beanField) throws Exception{
+        //key 的格式为 "${xxx.xxx.Xxx}"
         String key = beanField.getDeclaredAnnotation(Value.class).value();
-        ConfigurationManager configurationManager = (ConfigurationManager) BeanFactory.BEANS.get(ConfigurationManager.class.getName());
-        String value = configurationManager.getString(key);
-        if (value == null) {
-            throw new IllegalArgumentException("can not find target value for property:{" + key + "}");
+        String value = null;
+        for (String defaultConfigFilename : ConfigurationManager.DEFAULT_CONFIG_FILENAMES) {
+            if(BeanFactory.BEANS.get(defaultConfigFilename) != null){
+                log.info("找到配置文件:[{}]",defaultConfigFilename);
+                Map<String,String> map=(Map<String, String>) BeanFactory.BEANS.get(defaultConfigFilename);
+                value = map.get(StringUtil.injectionFormatToValuePath(key));
+                if (value == null) {
+                    throw new NotFoundTheValueCorrespondingToTheKeyException("不能找到"+key+"的值!");
+                }
+            }
         }
         return ObjectUtil.convert(beanField.getType(), value);
     }

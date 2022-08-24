@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Value {
     /**
-     * example: "my.app.myProp"
+     * 例子: "${my.app.myProp}"
      */
-    String value();
+    String value() default "";
 }
