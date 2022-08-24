@@ -3,11 +3,18 @@ package cn.zay.zayboot.core.config;
 import cn.zay.zayboot.core.config.loader.PropertiesResourceLoader;
 import cn.zay.zayboot.core.config.loader.ResourceLoader;
 import cn.zay.zayboot.core.config.loader.YamlResourceLoader;
+import cn.zay.zayboot.core.ioc.AutowiredBeanInitialization;
 import cn.zay.zayboot.core.ioc.BeanFactory;
 import lombok.extern.slf4j.Slf4j;
+
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author ZAY
@@ -66,5 +73,27 @@ public class ConfigurationManager implements Configuration{
             log.error("加载配置文件出错!",ex);
             System.exit(-1);
         }
+    }
+
+    /**
+     * 总的加载资源的过程
+     * @param applicationClass 启动类
+     */
+    public static void loadResources(Class<?> applicationClass){
+        ClassLoader classLoader = applicationClass.getClassLoader();
+        log.debug("classLoader:{}",classLoader.toString());
+        ConfigurationManager configurationManager =new ConfigurationManager();
+        List<Path> pathList=new ArrayList<>();
+        for (String configName : Configuration.DEFAULT_CONFIG_FILENAMES) {
+            URL url = classLoader.getResource(configName);
+            if (!Objects.isNull(url)) {
+                try {
+                    pathList.add(Paths.get(url.toURI()));
+                } catch (URISyntaxException e) {
+                    log.error("异常:[{}]",e.getMessage());
+                }
+            }
+        }
+        configurationManager.loadResources(pathList);
     }
 }

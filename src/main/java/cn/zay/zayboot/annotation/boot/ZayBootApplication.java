@@ -10,6 +10,6 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @ComponentScan
-public @interface SpringBootApplication {
+public @interface ZayBootApplication {
 
 }
