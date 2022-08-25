@@ -74,4 +74,9 @@ public class ResourceLoaderTest {
             e.printStackTrace();
         }
     }
+    @Test
+    public void fileReadTest(){
+        String path=Thread.currentThread().getContextClassLoader().getResource("application.yml").getPath();
+        log.debug(path);
+    }
 }

@@ -96,7 +96,6 @@ public class AutowiredBeanInitialization {
         String value = null;
         for (String defaultConfigFilename : ConfigurationManager.DEFAULT_CONFIG_FILENAMES) {
             if(BeanFactory.BEANS.get(defaultConfigFilename) != null){
-                log.info("找到配置文件:[{}]",defaultConfigFilename);
                 Map<String,String> map=(Map<String, String>) BeanFactory.BEANS.get(defaultConfigFilename);
                 value = map.get(StringUtil.injectionFormatToValuePath(key));
                 if (value == null) {

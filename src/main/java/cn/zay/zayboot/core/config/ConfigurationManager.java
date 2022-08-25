@@ -74,26 +74,4 @@ public class ConfigurationManager implements Configuration{
             System.exit(-1);
         }
     }
-
-    /**
-     * 总的加载资源的过程
-     * @param applicationClass 启动类
-     */
-    public static void loadResources(Class<?> applicationClass){
-        ClassLoader classLoader = applicationClass.getClassLoader();
-        log.debug("classLoader:{}",classLoader.toString());
-        ConfigurationManager configurationManager =new ConfigurationManager();
-        List<Path> pathList=new ArrayList<>();
-        for (String configName : Configuration.DEFAULT_CONFIG_FILENAMES) {
-            URL url = classLoader.getResource(configName);
-            if (!Objects.isNull(url)) {
-                try {
-                    pathList.add(Paths.get(url.toURI()));
-                } catch (URISyntaxException e) {
-                    log.error("异常:[{}]",e.getMessage());
-                }
-            }
-        }
-        configurationManager.loadResources(pathList);
-    }
 }

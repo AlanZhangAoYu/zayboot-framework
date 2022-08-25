@@ -1,11 +1,19 @@
 package cn.zay.zayboot.core.ioc;
 
 import cn.zay.zayboot.annotation.ioc.Component;
+import cn.zay.zayboot.core.config.ConfigurationManager;
 import cn.zay.zayboot.exception.NoSuchBeanDefinitionException;
 import cn.zay.zayboot.util.ReflectionUtil;
 import cn.zay.zayboot.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author ZAY
  */
+@Slf4j
 public final class BeanFactory {
     /**
      * bean 容器
@@ -60,6 +69,30 @@ public final class BeanFactory {
             beanName = "".equals(component.name()) ? StringUtil.lowercaseInitials(StringUtil.classPathToClassName(aClass.getName())) : component.name();
         }
         return beanName;
+    }
+
+    /**
+     * 自动注入, 扫描 BEANS中所有的 bean对象, 检查该对象中每个属性是否被 @Autowired和 @Value注解, 并自动注入
+     * @param packageName @ComponentScan扫描的包路径组
+     */
+    public static void automaticInjection(String[] packageName) throws Exception{
+        AutowiredBeanInitialization autowiredBeanInitialization=new AutowiredBeanInitialization(packageName);
+        ConfigurationManager configurationManager =new ConfigurationManager();
+        List<Path> pathList=new ArrayList<>();
+        for (String defaultConfigFilename : ConfigurationManager.DEFAULT_CONFIG_FILENAMES) {
+            URL resource = Thread.currentThread().getContextClassLoader().getResource(defaultConfigFilename);
+            if(resource != null){
+                log.info("找到配置文件[{}]",defaultConfigFilename);
+                URI uri=resource.toURI();
+                pathList.add(Paths.get(uri));
+            }
+        }
+        configurationManager.loadResources(pathList);
+        Set<String> keySet=BEANS.keySet();
+        for (String s : keySet) {
+            Object obj=getBean(s);
+            autowiredBeanInitialization.initialize(obj);
+        }
     }
     public static <T> T getBean(Class<T> type) throws NoSuchBeanDefinitionException {
         Object bean=BEANS.get(getBeanName(type));
