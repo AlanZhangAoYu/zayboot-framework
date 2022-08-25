@@ -79,15 +79,18 @@ public final class BeanFactory {
         AutowiredBeanInitialization autowiredBeanInitialization=new AutowiredBeanInitialization(packageName);
         ConfigurationManager configurationManager =new ConfigurationManager();
         List<Path> pathList=new ArrayList<>();
-        for (String defaultConfigFilename : ConfigurationManager.DEFAULT_CONFIG_FILENAMES) {
-            URL resource = Thread.currentThread().getContextClassLoader().getResource(defaultConfigFilename);
+        for (String defaultConfigFileName : ConfigurationManager.DEFAULT_CONFIG_FILENAMES) {
+            //分别在打包好的根路径下寻找默认配置文件, 若找到就将其添加到 pathList表中
+            URL resource = Thread.currentThread().getContextClassLoader().getResource(defaultConfigFileName);
             if(resource != null){
-                log.info("找到配置文件[{}]",defaultConfigFilename);
+                log.info("找到配置文件[{}]",defaultConfigFileName);
                 URI uri=resource.toURI();
                 pathList.add(Paths.get(uri));
             }
         }
+        //将配置文件加载到bean容器中
         configurationManager.loadResources(pathList);
+        //扫描容器中的每一个bean, 判断该bean是否需要注入, 并实施注入
         Set<String> keySet=BEANS.keySet();
         for (String s : keySet) {
             Object obj=getBean(s);

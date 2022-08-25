@@ -3,18 +3,11 @@ package cn.zay.zayboot.core.config;
 import cn.zay.zayboot.core.config.loader.PropertiesResourceLoader;
 import cn.zay.zayboot.core.config.loader.ResourceLoader;
 import cn.zay.zayboot.core.config.loader.YamlResourceLoader;
-import cn.zay.zayboot.core.ioc.AutowiredBeanInitialization;
 import cn.zay.zayboot.core.ioc.BeanFactory;
 import lombok.extern.slf4j.Slf4j;
-
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author ZAY
@@ -25,7 +18,6 @@ public class ConfigurationManager implements Configuration{
     private static final String PROPERTIES_FILE_EXTENSION = ".properties";
     private static final String YAML_FILE_EXTENSION = ".yaml";
     private static final String YML_FILE_EXTENSION = ".yml";
-    private final Configuration configuration = null;
 
     @Override
     public int getInt(String id) {

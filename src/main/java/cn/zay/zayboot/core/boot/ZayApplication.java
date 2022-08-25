@@ -1,7 +1,5 @@
 package cn.zay.zayboot.core.boot;
 
-import cn.zay.zayboot.core.config.ConfigurationManager;
-import cn.zay.zayboot.core.ioc.AutowiredBeanInitialization;
 import cn.zay.zayboot.core.ioc.BeanFactory;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +18,7 @@ public class ZayApplication {
             //加载 bean到 BEANS容器中
             BeanFactory.loadClass(packageNames);
             BeanFactory.loadBeans();
+            //扫描 @Autowired与 @Value,自动注入
             BeanFactory.automaticInjection(packageNames);
             log.info(BeanFactory.BEANS.toString());
         }catch (Exception e){

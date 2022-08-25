@@ -11,7 +11,6 @@ import cn.zay.zayboot.util.ObjectUtil;
 import cn.zay.zayboot.util.ReflectionUtil;
 import cn.zay.zayboot.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Set;
@@ -78,6 +77,7 @@ public class AutowiredBeanInitialization {
                 beanFieldName = qualifier == null ? beanFieldName : qualifier.value();
             }
         }
+        //该方法的核心语句
         Object beanFieldInstance = BeanFactory.BEANS.get(beanFieldName);
         if (beanFieldInstance == null) {
             throw new NoSuchBeanDefinitionException("找不到这个bean:" + beanFieldClass.getName());
@@ -91,12 +91,12 @@ public class AutowiredBeanInitialization {
      * @return 目标类的字段对应的对象
      */
     private Object processValueAnnotationField(Field beanField) throws Exception{
-        //key 的格式为 "${xxx.xxx.Xxx}"
+        //此时获取到的key的格式为 "${xxx.xxx.Xxx}"
         String key = beanField.getDeclaredAnnotation(Value.class).value();
         String value = null;
-        for (String defaultConfigFilename : ConfigurationManager.DEFAULT_CONFIG_FILENAMES) {
-            if(BeanFactory.BEANS.get(defaultConfigFilename) != null){
-                Map<String,String> map=(Map<String, String>) BeanFactory.BEANS.get(defaultConfigFilename);
+        for (String defaultConfigFileName : ConfigurationManager.DEFAULT_CONFIG_FILENAMES) {
+            if(BeanFactory.BEANS.get(defaultConfigFileName) != null){
+                Map<String,String> map=(Map<String, String>) BeanFactory.BEANS.get(defaultConfigFileName);
                 value = map.get(StringUtil.injectionFormatToValuePath(key));
                 if (value == null) {
                     throw new NotFoundTheValueCorrespondingToTheKeyException("不能找到"+key+"的值!");
