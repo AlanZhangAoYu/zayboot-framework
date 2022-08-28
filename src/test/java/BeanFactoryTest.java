@@ -1,3 +1,5 @@
+import cn.zay.demo.java.pojo.ClassA;
+import cn.zay.demo.java.pojo.ClassB;
 import cn.zay.demo.java.pojo.Student;
 import cn.zay.demo.java.pojo.StudentAutowired;
 import cn.zay.zayboot.core.ioc.AutowiredBeanInitialization;
@@ -19,7 +21,7 @@ public class BeanFactoryTest {
             //这里为什么不能用Class.forName("cn.zay.demo.java.pojo")
             log.debug(BeanFactory.getBeanName(Student.class));
         } catch (Exception e) {
-            log.error("异常:[{}]",e.getMessage());
+            log.error("异常",e);
         }
     }
     @Test
@@ -35,7 +37,7 @@ public class BeanFactoryTest {
             BeanFactory.loadBeans();
             log.debug(BeanFactory.getBean("ZAY").toString());
         } catch (NoSuchBeanDefinitionException e) {
-            e.printStackTrace();
+            log.error("异常",e);
         }
     }
     @Test
@@ -49,7 +51,7 @@ public class BeanFactoryTest {
             log.debug(BeanFactory.BEANS.toString());
             studentAutowired.ZAY.sayHello();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("异常",e);
         }
     }
     @Test
@@ -60,7 +62,22 @@ public class BeanFactoryTest {
             BeanFactory.automaticInjection(new String[]{"cn.zay.demo.java.pojo"});
             log.debug(BeanFactory.BEANS.toString());
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("异常",e);
         }
+    }
+    @Test
+    public void test7(){
+        try{
+            BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+            BeanFactory.loadBeans();
+            BeanFactory.automaticInjection(new String[]{"cn.zay.demo.java.pojo"});
+            ClassA classA=(ClassA) BeanFactory.getBean("classA");
+            ClassB classB=(ClassB) BeanFactory.getBean("classB");
+            classA.showInfo();
+            classB.showInfo();
+        }catch (Exception e){
+            log.error("异常",e);
+        }
+
     }
 }

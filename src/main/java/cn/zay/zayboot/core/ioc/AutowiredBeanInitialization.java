@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author ZAY
@@ -22,6 +23,11 @@ import java.util.Set;
 @Slf4j
 public class AutowiredBeanInitialization {
     private final String[] packageNames;
+    /**
+     * 二级缓存 (解决循环依赖问题)
+     */
+    private static final Map<String, Object> SINGLETON_OBJECTS = new ConcurrentHashMap<>(64);
+
     public AutowiredBeanInitialization(String[] packageNames) {
         this.packageNames = packageNames;
     }
@@ -40,7 +46,9 @@ public class AutowiredBeanInitialization {
             for (Field beanField : beanFields) {
                 if (beanField.isAnnotationPresent(Autowired.class)) {
                     Object beanFieldInstance = processAutowiredAnnotationField(beanField);
-                    //String beanFieldName = BeanFactory.getBeanName(beanField.getType());
+                    String beanFieldName = BeanFactory.getBeanName(beanField.getType());
+                    // 解决循环依赖问题
+                    //beanFieldInstance = resolveCircularDependency(beanInstance, beanFieldInstance, beanFieldName);
                     ReflectionUtil.setField(beanInstance, beanField, beanFieldInstance);
                 }
                 if (beanField.isAnnotationPresent(Value.class)){
@@ -104,5 +112,21 @@ public class AutowiredBeanInitialization {
             }
         }
         return ObjectUtil.convert(beanField.getType(), value);
+    }
+
+    /**
+     * 二级缓存解决循环依赖问题
+     * @param beanInstance 要实施注入的 bean对象
+     * @param beanFieldInstance 要注入的值或对象
+     * @param beanFieldName 当前要注入的字段的名称
+     * @return 要注入的值或对象
+     */
+    private Object resolveCircularDependency(Object beanInstance, Object beanFieldInstance, String beanFieldName) throws Exception{
+        if (SINGLETON_OBJECTS.containsKey(beanFieldName)) {
+            beanFieldInstance = SINGLETON_OBJECTS.get(beanFieldName);
+        } else {
+            SINGLETON_OBJECTS.put(beanFieldName, beanFieldInstance);
+        }
+        return beanFieldInstance;
     }
 }

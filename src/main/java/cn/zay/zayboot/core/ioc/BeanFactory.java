@@ -34,8 +34,7 @@ public final class BeanFactory {
     public static final Map<Class<? extends Annotation>, Set<Class<?>>> CLASSES = new ConcurrentHashMap<>(128);
 
     /**
-     * 扫描出指定包路径下被@Component注解的类(后续还会添加更多注解),
-     * 并存放到 CLASSES容器中
+     * 扫描出指定包路径下被 @Component注解的类(后续还会添加更多注解),并存放到 CLASSES容器中
      * @param packageName 指定的包路径
      */
     public static void loadClass(String[] packageName) {
