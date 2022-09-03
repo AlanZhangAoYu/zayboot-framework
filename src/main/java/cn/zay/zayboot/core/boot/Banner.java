@@ -15,7 +15,9 @@ import java.nio.file.Paths;
  */
 @Slf4j
 public class Banner {
-    // banner在 https://www.bootschool.net/ascii 中制作
+    /**
+     * banner在 https://www.bootschool.net/ascii 中制作
+     */
     public static final String CUSTOM_BANNER_NAME = "banner.txt";
     public static void print() {
         URL url = Thread.currentThread().getContextClassLoader().getResource(CUSTOM_BANNER_NAME);

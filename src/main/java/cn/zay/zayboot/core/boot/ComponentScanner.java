@@ -15,7 +15,7 @@ public class ComponentScanner {
      */
     public static String[] getPackageNames(Class<?> applicationClass) {
         ComponentScan componentScan = applicationClass.getAnnotation(ComponentScan.class);
-        return !Objects.isNull(componentScan) ? componentScan.value()
+        return componentScan != null ? componentScan.value()
                 : new String[]{applicationClass.getPackage().getName()};
     }
 }

@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component(name = "ZAY")
-public class Student {
+public class Student implements Eat{
     private String name;
     private int age;
     public Student(){
@@ -28,6 +28,10 @@ public class Student {
     }
     public void sayHello(){
         log.info("Hello,我是学生{}.",getName());
+    }
+    @Override
+    public void eat() {
+        log.info("学生{}吃饭",name);
     }
     @Override
     public String toString() {
