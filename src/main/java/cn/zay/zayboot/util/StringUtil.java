@@ -1,7 +1,9 @@
 package cn.zay.zayboot.util;
 
+import cn.zay.zayboot.exception.IllegalParameterFormatException;
 
 /**
+ * 一些涉及字符串的方法
  * @author ZAY
  */
 public class StringUtil {
@@ -13,7 +15,7 @@ public class StringUtil {
     public static String lowercaseInitials(String str){
         str=str.trim();
         char[] chars=str.toCharArray();
-        if (chars[0] >=65 && chars[0] <= 90) {
+        if (chars[0] >= 'A' && chars[0] <= 'Z') {
             //首字母为大写则转换, 为小写则不变, 原样输出
             chars[0]= (char) (chars[0]+('a'-'A'));
         }
@@ -33,8 +35,68 @@ public class StringUtil {
      * @param str 输入的格式
      * @return 转换后的值
      */
-    public static String injectionFormatToValuePath(String str){
+    public static String injectionFormatToValuePath(String str) throws IllegalParameterFormatException{
         str=str.trim();
-        return str.substring(2,str.length()-1).trim();
+        if(str.startsWith("#{") || str.startsWith("${")){
+            if(str.endsWith("}")){
+                return str.substring(2,str.length()-1).trim();
+            }
+        }
+        throw new IllegalParameterFormatException("传入的参数不合法!");
+    }
+    /**
+     * 根据给定模式匹配字符串, 支持以下简单图案样式: "xxx*"、"*xxx*"、"*xxx*"、"xxx*yyy"
+     * @param pattern 要匹配的样式
+     * @param str 要匹配的字符串
+     * @return 字符串与指定样式是否匹配
+     */
+    public static boolean simpleMatch(String pattern, String str) {
+        if (pattern == null || str == null) {
+            return false;
+        }
+        int firstIndex = pattern.indexOf('*');
+        if (firstIndex == -1) {
+            return pattern.equals(str);
+        }
+        if (firstIndex == 0) {
+            if (pattern.length() == 1) {
+                return true;
+            }
+            int nextIndex = pattern.indexOf('*', firstIndex + 1);
+            if (nextIndex == -1) {
+                return str.endsWith(pattern.substring(1));
+            }
+            String part = pattern.substring(1, nextIndex);
+            if ("".equals(part)) {
+                return simpleMatch(pattern.substring(nextIndex), str);
+            }
+            int partIndex = str.indexOf(part);
+            while (partIndex != -1) {
+                if (simpleMatch(pattern.substring(nextIndex), str.substring(partIndex + part.length()))) {
+                    return true;
+                }
+                partIndex = str.indexOf(part, partIndex + 1);
+            }
+            return false;
+        }
+        return (str.length() >= firstIndex
+                && pattern.substring(0, firstIndex).equals(str.substring(0, firstIndex))
+                && simpleMatch(pattern.substring(firstIndex), str.substring(firstIndex)));
+    }
+    /**
+     * 给定一组指定样式, 去匹配字符串
+     * @param patterns 要匹配的样式组
+     * @param str 要匹配的字符串
+     * @return 给定字符串是否与给定样式中的一个匹配
+     */
+    public static boolean simpleMatch(String[] patterns, String str) {
+        if (patterns != null) {
+            for (String pattern : patterns) {
+                if (simpleMatch(pattern, str)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

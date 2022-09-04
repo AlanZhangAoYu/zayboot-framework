@@ -20,14 +20,22 @@ public class MethodInvocation {
      * 目标方法的参数
      */
     private final Object[] args;
-
     public MethodInvocation(Object targetObject, Method targetMethod, Object[] args) {
         this.targetObject = targetObject;
         this.targetMethod = targetMethod;
         this.args = args;
     }
-
     public Object proceed() {
         return ReflectionUtil.executeTargetMethod(targetObject, targetMethod, args);
+    }
+
+    public Method getTargetMethod() {
+        return targetMethod;
+    }
+    public Object getTargetObject() {
+        return targetObject;
+    }
+    public Object[] getArgs() {
+        return args;
     }
 }

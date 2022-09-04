@@ -1,3 +1,4 @@
+import cn.zay.zayboot.exception.IllegalParameterFormatException;
 import cn.zay.zayboot.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,14 @@ public class StringTest {
     }
     @Test
     public void test3(){
-        log.debug(StringUtil.injectionFormatToValuePath("$( xxx.xxx.Xxx) "));
+        try {
+            log.debug(StringUtil.injectionFormatToValuePath("$( xxx.xxx.Xxx} "));
+        } catch (IllegalParameterFormatException e) {
+            log.error("异常!",e);
+        }
+    }
+    @Test
+    public void test4(){
+        log.debug("{}",StringUtil.simpleMatch("*Server*","studentServer"));
     }
 }
