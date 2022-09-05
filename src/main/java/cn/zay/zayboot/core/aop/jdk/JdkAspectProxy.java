@@ -34,6 +34,6 @@ public class JdkAspectProxy implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) {
         MethodInvocation methodInvocation = new MethodInvocation(target, method, args);
         //返回值仍然是代理类执行的结果
-        return interceptor.intercept(methodInvocation);
+        return interceptor.agent(methodInvocation);
     }
 }

@@ -2,10 +2,11 @@ package cn.zay.zayboot.core.aop;
 
 /**
  * @author ZAY
+ * 切点
  */
 public interface JoinPoint {
     /**
-     * get point this
+     * 获取通知 bean
      */
     Object getAdviceBean();
 
@@ -15,7 +16,7 @@ public interface JoinPoint {
     Object getTarget();
 
     /**
-     * get parameters for object array
+     * 获取切点对象的参数
      */
     Object[] getArgs();
 }

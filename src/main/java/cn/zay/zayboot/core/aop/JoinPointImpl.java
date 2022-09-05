@@ -2,6 +2,7 @@ package cn.zay.zayboot.core.aop;
 
 /**
  * @author ZAY
+ * 切点的实现类
  */
 public class JoinPointImpl implements JoinPoint{
     private final Object adviceBean;

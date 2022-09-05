@@ -17,7 +17,7 @@ public abstract class Interceptor {
      * @param methodInvocation 要拦截的方法
      * @return 返回拦截后方法执行的结果
      */
-    public abstract Object intercept(MethodInvocation methodInvocation);
+    public abstract Object agent(MethodInvocation methodInvocation);
     public int getOrder() {
         return order;
     }

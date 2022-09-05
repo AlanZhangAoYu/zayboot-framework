@@ -33,6 +33,12 @@
             <artifactId>reflections</artifactId>
             <version>0.10.2</version>
         </dependency>
+        <!-- cglib动态代理组件 -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.3.0</version>
+        </dependency>
         <!-- 解析yml文件 -->
         <dependency>
             <groupId>org.yaml</groupId>
