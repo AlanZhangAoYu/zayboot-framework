@@ -24,11 +24,11 @@ public class InternallyAspectInterceptor extends Interceptor{
      */
     private final HashSet<String> expressionUrls = new HashSet<>();
     /**
-     * 用来存放所有要切入被代理方法之前的方法
+     * 用来存放所有要切入被代理方法之前的方法 (被 @Before注释的方法)
      */
     private final List<Method> beforeMethods = new ArrayList<>();
     /**
-     * 用来存放所有要切入被代理方法之后的方法
+     * 用来存放所有要切入被代理方法之后的方法 (被 @After注释的方法)
      */
     private final List<Method> afterMethods = new ArrayList<>();
     public InternallyAspectInterceptor(Object adviceBean) {
@@ -65,11 +65,10 @@ public class InternallyAspectInterceptor extends Interceptor{
      */
     @Override
     public Object agent(MethodInvocation methodInvocation) {
-        JoinPoint joinPoint = new JoinPointImpl(adviceBean, methodInvocation.getTargetObject(),
-                methodInvocation.getArgs());
-        beforeMethods.forEach(method -> ReflectionUtil.executeTargetMethodNoResult(adviceBean, method, joinPoint));
+        // JoinPoint joinPoint = new JoinPointImpl(adviceBean, methodInvocation.getTargetObject(), methodInvocation.getArgs());
+        beforeMethods.forEach(method -> ReflectionUtil.executeTargetMethodNoResult(adviceBean, method));
         Object result = methodInvocation.run();
-        afterMethods.forEach(method -> ReflectionUtil.executeTargetMethodNoResult(adviceBean, method, result, joinPoint));
+        afterMethods.forEach(method -> ReflectionUtil.executeTargetMethodNoResult(adviceBean, method));
         return result;
     }
 }

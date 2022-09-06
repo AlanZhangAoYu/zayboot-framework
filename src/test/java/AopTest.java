@@ -1,17 +1,24 @@
-import cn.zay.demo.java.pojo.Student;
+import cn.zay.zayboot.core.aop.InterceptorFactory;
+import cn.zay.zayboot.core.aop.MethodInvocation;
 import cn.zay.zayboot.core.ioc.BeanFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Method;
+
 @Slf4j
 public class AopTest {
     @Test
-    public void jdkTest1(){
+    public void test1(){
         try{
-            BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+            String[] packageNames=new String[]{"cn.zay.demo.java.pojo"};
+            BeanFactory.loadClass(packageNames);
             BeanFactory.loadBeans();
-            BeanFactory.automaticInjection(new String[]{"cn.zay.demo.java.pojo"});
-            Student student=(Student) BeanFactory.getBean("ZAY");
-            log.info(student.toString());
+            InterceptorFactory.loadInterceptors(packageNames);
+            log.info(InterceptorFactory.getInterceptors().toString());
+            Method method=BeanFactory.getBean("people").getClass().getMethod("working");
+            MethodInvocation methodInvocation=new MethodInvocation(BeanFactory.getBean("people"),method,null);
+            InterceptorFactory.getInterceptors().get(0).agent(methodInvocation);
         }catch (Exception e){
             log.error("异常!",e);
         }

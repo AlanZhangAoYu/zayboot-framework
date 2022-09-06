@@ -6,7 +6,7 @@ package cn.zay.zayboot.core.aop;
  */
 public abstract class Interceptor {
     /**
-     * 拦截器的优先级
+     * 拦截器的优先级, 默认为 -1, 先来先服务
      */
     private int order = -1;
     public boolean supports(Object bean) {

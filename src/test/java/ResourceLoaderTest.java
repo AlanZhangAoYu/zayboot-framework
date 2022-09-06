@@ -26,7 +26,7 @@ public class ResourceLoaderTest {
             log.debug(map.toString());
             log.debug(map.get("org.slf4j.simpleLogger.defaultLogLevel"));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("异常!",e);
         }
     }
     @Test
@@ -37,7 +37,7 @@ public class ResourceLoaderTest {
             Map<String, String> map = yamlResourceLoader.loadResource(path);
             log.debug(map.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("异常!",e);
         }
     }
     @Test
@@ -53,7 +53,7 @@ public class ResourceLoaderTest {
         try {
             log.debug(BeanFactory.getBean("application.yml").toString());
         } catch (NoSuchBeanDefinitionException e) {
-            e.printStackTrace();
+            log.error("异常!",e);
         }
     }
     @Test
@@ -71,7 +71,7 @@ public class ResourceLoaderTest {
             log.debug(BeanFactory.BEANS.toString());
             log.debug(server.toString());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("异常!",e);
         }
     }
     @Test

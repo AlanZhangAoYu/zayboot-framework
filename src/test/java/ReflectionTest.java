@@ -20,7 +20,7 @@ public class ReflectionTest {
                 }
             }
         } catch (ClassNotFoundException e) {
-            log.error("异常:[{}]",e.getMessage());
+            log.error("异常!",e);
         }
     }
     @Test
@@ -30,7 +30,7 @@ public class ReflectionTest {
             Method method=student.getClass().getMethod("sayHello");
             ReflectionUtil.executeTargetMethod(student,method);
         } catch (Exception e) {
-            log.error("异常:[{}]",e.getMessage());
+            log.error("异常!",e);
         }
     }
 }

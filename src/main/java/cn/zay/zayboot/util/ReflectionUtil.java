@@ -5,7 +5,6 @@ import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
 
@@ -47,7 +46,7 @@ public class ReflectionUtil {
             return cls.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             //throw new IllegalStateException(e.getMessage(), e);
-            log.error("异常:[{}]",e.getMessage());
+            log.error("异常!",e);
         }
         return null;
     }
@@ -62,7 +61,7 @@ public class ReflectionUtil {
         try {
             field.set(obj, value);
         } catch (IllegalAccessException impossible) {
-            log.error("异常:[{}]",impossible.getMessage());
+            log.error("异常!",impossible);
         }
     }
     /**
@@ -76,7 +75,7 @@ public class ReflectionUtil {
         try {
             return method.invoke(targetObject, args);
         } catch (Exception e) {
-            log.error("异常:[{}]",e.getMessage());
+            log.error("异常!",e);
         }
         return null;
     }
@@ -90,7 +89,8 @@ public class ReflectionUtil {
         try {
             // invoke target method through reflection
             method.invoke(targetObject, args);
-        } catch (IllegalAccessException | InvocationTargetException ignored) {
+        } catch (Exception e) {
+            log.error("异常!",e);
         }
     }
 }
