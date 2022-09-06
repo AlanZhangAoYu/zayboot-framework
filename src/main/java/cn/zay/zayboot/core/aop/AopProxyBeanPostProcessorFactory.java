@@ -1,5 +1,8 @@
 package cn.zay.zayboot.core.aop;
 
+import cn.zay.zayboot.core.aop.cglib.CglibAopProxyBeanPostProcessor;
+import cn.zay.zayboot.core.aop.jdk.JdkAopProxyBeanPostProcessor;
+
 /**
  * @author ZAY
  * Aop代理 Bean后处理器工厂
@@ -11,11 +14,9 @@ public class AopProxyBeanPostProcessorFactory {
      */
     public static BeanPostProcessor get(Class<?> beanClass) {
         if (beanClass.isInterface() || beanClass.getInterfaces().length > 0) {
-            //return new JdkAopProxyBeanPostProcessor();
-            return null;
+            return new JdkAopProxyBeanPostProcessor();
         } else {
-            //return new CglibAopProxyBeanPostProcessor();
-            return null;
+            return new CglibAopProxyBeanPostProcessor();
         }
     }
 }

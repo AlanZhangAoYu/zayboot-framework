@@ -18,6 +18,11 @@ import java.util.stream.Collectors;
  */
 public class InterceptorFactory {
     private static List<Interceptor> interceptors = new ArrayList<>();
+    /**
+     * 加载指定包路径下被 BeanFactory代理的类中所有的拦截器 Interceptor以及所有被 @Aspect标记的类
+     * @param packageName 指定的包路径, 一般为 @ComponentScan中设置的值
+     * @throws Exception 有些类实现了 Interceptor接口, 但是是抽象类, 或者没有空的构造函数, 可能抛出异常
+     */
     public static void loadInterceptors(String[] packageName) throws Exception{
         // 获取指定包中实现了 Interceptor 接口的类
         Set<Class<? extends Interceptor>> interceptorClasses = ReflectionUtil.getSubClass(packageName, Interceptor.class);
@@ -41,8 +46,8 @@ public class InterceptorFactory {
             interceptors.add(interceptor);
         });
         // 添加Bean验证拦截器
-        //interceptors.add(new BeanValidationInterceptor());
-        // 根据 order 为拦截器排序
+        interceptors.add(new BeanValidationInterceptor());
+        // 根据 order为拦截器排序
         interceptors = interceptors.stream().sorted(Comparator.comparing(Interceptor::getOrder)).collect(Collectors.toList());
     }
 

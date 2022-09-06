@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 /**
  * @author ZAY
+ * 拦截器的实现类
  */
 public class InternallyAspectInterceptor extends Interceptor{
     /**
