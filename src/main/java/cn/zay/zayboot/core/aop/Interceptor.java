@@ -5,10 +5,6 @@ package cn.zay.zayboot.core.aop;
  * 拦截器
  */
 public abstract class Interceptor {
-    /**
-     * 拦截器的优先级, 默认为 -1, 先来先服务
-     */
-    private int order = -1;
     public boolean supports(Object bean) {
         return false;
     }
@@ -18,10 +14,4 @@ public abstract class Interceptor {
      * @return 返回拦截后方法执行的结果
      */
     public abstract Object agent(MethodInvocation methodInvocation);
-    public int getOrder() {
-        return order;
-    }
-    public void setOrder(int order) {
-        this.order = order;
-    }
 }

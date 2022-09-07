@@ -20,10 +20,6 @@ public class InternallyAspectInterceptor extends Interceptor{
      */
     private final Object adviceBean;
     /**
-     * 用来存放所有 @Pointcut注释中的值
-     */
-    private final HashSet<String> expressionUrls = new HashSet<>();
-    /**
      * 用来存放所有要切入被代理方法之前的方法 (被 @Before注释的方法)
      */
     private final List<Method> beforeMethods = new ArrayList<>();
@@ -42,7 +38,7 @@ public class InternallyAspectInterceptor extends Interceptor{
         for (Method method : adviceBean.getClass().getMethods()) {
             Pointcut pointcut = method.getAnnotation(Pointcut.class);
             if (pointcut != null) {
-                expressionUrls.add(pointcut.value());
+
             }
             Before before = method.getAnnotation(Before.class);
             if (before != null) {
@@ -56,7 +52,7 @@ public class InternallyAspectInterceptor extends Interceptor{
     }
     @Override
     public boolean supports(Object bean) {
-        return expressionUrls.stream().anyMatch(url -> StringUtil.simpleMatch(url, bean.getClass().getName())) && (!beforeMethods.isEmpty() || !afterMethods.isEmpty());
+        return false;
     }
     /**
      * 在方法执行器 methodInvocation前后执行 beforeMethods和 afterMethods中的方法, 完成 aop代理
@@ -65,7 +61,7 @@ public class InternallyAspectInterceptor extends Interceptor{
      */
     @Override
     public Object agent(MethodInvocation methodInvocation) {
-        // JoinPoint joinPoint = new JoinPointImpl(adviceBean, methodInvocation.getTargetObject(), methodInvocation.getArgs());
+        //JoinPoint joinPoint = new JoinPointImpl(adviceBean, methodInvocation.getTargetObject(), methodInvocation.getArgs());
         beforeMethods.forEach(method -> ReflectionUtil.executeTargetMethodNoResult(adviceBean, method));
         Object result = methodInvocation.run();
         afterMethods.forEach(method -> ReflectionUtil.executeTargetMethodNoResult(adviceBean, method));
