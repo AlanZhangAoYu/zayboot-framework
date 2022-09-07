@@ -9,11 +9,11 @@ public abstract class AbstractAopProxyBeanPostProcessor implements BeanPostProce
     public Object postProcessAfterInitialization(Object bean) {
         Object wrapperProxyBean = bean;
         //链式包装目标类
-        for (Interceptor interceptor : InterceptorFactory.getInterceptors()) {
+        /*for (Interceptor interceptor : InterceptorFactory.interceptors.entrySet()) {
             if (interceptor.supports(bean)) {
                 wrapperProxyBean = wrapBean(wrapperProxyBean, interceptor);
             }
-        }
+        }*/
         return wrapperProxyBean;
     }
     public abstract Object wrapBean(Object target, Interceptor interceptor);

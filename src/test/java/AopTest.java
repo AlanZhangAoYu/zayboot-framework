@@ -15,10 +15,9 @@ public class AopTest {
             BeanFactory.loadClass(packageNames);
             BeanFactory.loadBeans();
             InterceptorFactory.loadInterceptors(packageNames);
-            log.info(InterceptorFactory.getInterceptors().toString());
             Method method=BeanFactory.getBean("people").getClass().getMethod("working");
             MethodInvocation methodInvocation=new MethodInvocation(BeanFactory.getBean("people"),method,null);
-            InterceptorFactory.getInterceptors().get(0).agent(methodInvocation);
+            InterceptorFactory.interceptors.get("0").agent(methodInvocation);
         }catch (Exception e){
             log.error("异常!",e);
         }
