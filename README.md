@@ -19,7 +19,6 @@
   - @After
   - @Aspect
   - @Before
-  - @Order
   - @Pointcut
 - 控制层Mvc
   - @GetMapping

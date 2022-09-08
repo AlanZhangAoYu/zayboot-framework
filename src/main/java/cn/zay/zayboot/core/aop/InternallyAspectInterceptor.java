@@ -1,14 +1,7 @@
 package cn.zay.zayboot.core.aop;
 
-import cn.zay.zayboot.annotation.aop.After;
-import cn.zay.zayboot.annotation.aop.Before;
-import cn.zay.zayboot.annotation.aop.Pointcut;
-import cn.zay.zayboot.util.ReflectionUtil;
-import cn.zay.zayboot.util.StringUtil;
-
-import java.lang.reflect.Method;
+import cn.zay.zayboot.exception.UnrecognizedPointcutMethodException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 /**
  * @author ZAY
@@ -16,37 +9,47 @@ import java.util.List;
  */
 public class InternallyAspectInterceptor extends Interceptor{
     /**
-     * 被代理方法所在的类
+     * 要被代理的方法(被 @Pointcut注释的方法)的执行器
      */
-    private final Object adviceBean;
+    private final MethodInvocation methodInvocation;
     /**
-     * 用来存放所有要切入被代理方法之前的方法 (被 @Before注释的方法)
+     * 用来存放所有要切入被代理方法之前的方法的执行器 (被 @Before注释的方法)
      */
-    private final List<Method> beforeMethods = new ArrayList<>();
+    private final List<MethodInvocation> beforeMethods = new ArrayList<>();
     /**
-     * 用来存放所有要切入被代理方法之后的方法 (被 @After注释的方法)
+     * 用来存放所有要切入被代理方法之后的方法的执行器 (被 @After注释的方法)
      */
-    private final List<Method> afterMethods = new ArrayList<>();
-    public InternallyAspectInterceptor(Object adviceBean) {
-        this.adviceBean = adviceBean;
+    private final List<MethodInvocation> afterMethods = new ArrayList<>();
+    public InternallyAspectInterceptor(MethodInvocation methodInvocation) throws Exception{
+        this.methodInvocation = methodInvocation;
         init();
     }
     /**
-     * 扫描 adviceBean中所有的方法, 寻找切点、要切入的方法并将其存入对应的集合以备后续使用
+     * 寻找与要被代理的 Pointcut方法匹配的所有 @Before和 @After并将其存入对应的列表中以备后续使用
      */
-    private void init() {
-        for (Method method : adviceBean.getClass().getMethods()) {
-            Pointcut pointcut = method.getAnnotation(Pointcut.class);
-            if (pointcut != null) {
-
+    private void init() throws Exception{
+        for (String s : InterceptorFactory.BEFORE_METHODS_MAP.keySet()) {
+            for (String beforePointcut : InterceptorFactory.BEFORE_METHODS_MAP.get(s).getBeforePointcuts()) {
+                if(InterceptorFactory.POINTCUT_METHODS_MAP.get(beforePointcut) != null){
+                    if((methodInvocation.getTargetObject().getClass().getName()+"."+
+                            methodInvocation.getTargetMethod().getName()).equals(beforePointcut)){
+                        beforeMethods.add(InterceptorFactory.BEFORE_METHODS_MAP.get(s).getMethodInvocation());
+                    }
+                }else{
+                    throw new UnrecognizedPointcutMethodException("未能识别该["+beforePointcut+"]Pointcut方法, 请确任该方法存在且被@Pointcut注释");
+                }
             }
-            Before before = method.getAnnotation(Before.class);
-            if (before != null) {
-                beforeMethods.add(method);
-            }
-            After after = method.getAnnotation(After.class);
-            if (after != null) {
-                afterMethods.add(method);
+        }
+        for (String s : InterceptorFactory.AFTER_METHODS_MAP.keySet()) {
+            for (String beforePointcut : InterceptorFactory.AFTER_METHODS_MAP.get(s).getBeforePointcuts()) {
+                if(InterceptorFactory.POINTCUT_METHODS_MAP.get(beforePointcut) != null){
+                    if((methodInvocation.getTargetObject().getClass().getName()+"."+
+                            methodInvocation.getTargetMethod().getName()).equals(beforePointcut)){
+                        afterMethods.add(InterceptorFactory.AFTER_METHODS_MAP.get(s).getMethodInvocation());
+                    }
+                }else{
+                    throw new UnrecognizedPointcutMethodException("未能识别该["+beforePointcut+"]Pointcut方法, 请确任该方法存在且被@Pointcut注释");
+                }
             }
         }
     }
@@ -54,17 +57,23 @@ public class InternallyAspectInterceptor extends Interceptor{
     public boolean supports(Object bean) {
         return false;
     }
+    @Override
+    public Object agent(MethodInvocation methodInvocation) {
+        return null;
+    }
     /**
      * 在方法执行器 methodInvocation前后执行 beforeMethods和 afterMethods中的方法, 完成 aop代理
-     * @param methodInvocation 被代理的方法的执行器
      * @return 返回原本被代理的方法的方法执行器的执行结果
      */
     @Override
-    public Object agent(MethodInvocation methodInvocation) {
-        //JoinPoint joinPoint = new JoinPointImpl(adviceBean, methodInvocation.getTargetObject(), methodInvocation.getArgs());
-        beforeMethods.forEach(method -> ReflectionUtil.executeTargetMethodNoResult(adviceBean, method));
+    public Object agent(){
+        for (MethodInvocation beforeMethod : beforeMethods) {
+            beforeMethod.run();
+        }
         Object result = methodInvocation.run();
-        afterMethods.forEach(method -> ReflectionUtil.executeTargetMethodNoResult(adviceBean, method));
+        for (MethodInvocation afterMethod : afterMethods) {
+            afterMethod.run();
+        }
         return result;
     }
 }

@@ -43,4 +43,8 @@ public class BeanValidationInterceptor extends Interceptor {
         }
         return methodInvocation.run();
     }
+    @Override
+    public Object agent(){
+        return null;
+    }
 }

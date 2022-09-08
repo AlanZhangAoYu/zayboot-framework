@@ -1,11 +1,14 @@
 package cn.zay.demo.java.pojo;
 
+import cn.zay.zayboot.annotation.aop.After;
+import cn.zay.zayboot.annotation.aop.Aspect;
 import cn.zay.zayboot.annotation.ioc.Component;
 import lombok.extern.slf4j.Slf4j;
 /**
  * @author ZAY
  */
 @Slf4j
+@Aspect
 @Component(name = "ZAY")
 public class Student{
     private String name;
@@ -26,6 +29,7 @@ public class Student{
     public void setName(String name) {
         this.name = name;
     }
+    @After({"cn.zay.demo.java.pojo.People.working"})
     public void sayHello(){
         log.info("Hello,我是学生{}.",getName());
     }

@@ -1,3 +1,4 @@
+import cn.zay.demo.java.pojo.Student;
 import cn.zay.zayboot.core.aop.InterceptorFactory;
 import cn.zay.zayboot.core.aop.MethodInvocation;
 import cn.zay.zayboot.core.ioc.BeanFactory;
@@ -15,11 +16,18 @@ public class AopTest {
             BeanFactory.loadClass(packageNames);
             BeanFactory.loadBeans();
             InterceptorFactory.loadInterceptors(packageNames);
-            Method method=BeanFactory.getBean("people").getClass().getMethod("working");
-            MethodInvocation methodInvocation=new MethodInvocation(BeanFactory.getBean("people"),method,null);
-            InterceptorFactory.INTERCEPTORS.get("0").agent(methodInvocation);
+            InterceptorFactory.INTERCEPTORS.get("cn.zay.demo.java.pojo.People.working").agent();
+            InterceptorFactory.runAgentMethod("cn.zay.demo.java.pojo.People.working");
         }catch (Exception e){
             log.error("异常!",e);
+        }
+    }
+    @Test
+    public void test2(){
+        Class<Student> aClass= Student.class;
+        Method[] methods = aClass.getMethods();
+        for (Method method : methods) {
+            log.info(aClass.getName()+"."+method.getName());
         }
     }
 }
