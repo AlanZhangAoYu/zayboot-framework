@@ -1,6 +1,5 @@
 import cn.zay.demo.java.pojo.Student;
 import cn.zay.zayboot.core.aop.InterceptorFactory;
-import cn.zay.zayboot.core.aop.MethodInvocation;
 import cn.zay.zayboot.core.ioc.BeanFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -18,6 +17,7 @@ public class AopTest {
             InterceptorFactory.loadInterceptors(packageNames);
             InterceptorFactory.INTERCEPTORS.get("cn.zay.demo.java.pojo.People.working").agent();
             InterceptorFactory.runAgentMethod("cn.zay.demo.java.pojo.People.working");
+            InterceptorFactory.runAgentMethod("cn.zay.demo.java.pojo.People.haveLunch","12:00");
         }catch (Exception e){
             log.error("异常!",e);
         }

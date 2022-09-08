@@ -26,11 +26,18 @@ public class MethodInvocation {
         this.args = args;
     }
     /**
-     * 执行目标方法
+     * 执行有参目标方法
+     * @return 目标方法执行的结果
+     */
+    public Object run(Object[] args) {
+        return ReflectionUtil.executeTargetMethod(targetObject, targetMethod, args);
+    }
+    /**
+     * 执行无参目标方法
      * @return 目标方法执行的结果
      */
     public Object run() {
-        return ReflectionUtil.executeTargetMethod(targetObject, targetMethod, args);
+        return ReflectionUtil.executeTargetMethod(targetObject, targetMethod);
     }
     public Method getTargetMethod() {
         return targetMethod;

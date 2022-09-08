@@ -14,5 +14,6 @@ public abstract class Interceptor {
      * @return 返回拦截后方法执行的结果
      */
     public abstract Object agent(MethodInvocation methodInvocation);
+    public abstract Object agent(Object[] args);
     public abstract Object agent();
 }

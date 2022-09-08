@@ -90,11 +90,12 @@ public class InterceptorFactory {
     /**
      * 运行最终生成的代理方法
      * @param methodName 方法名, 格式为: "xxx.xxx.xx.Xxx.aaaBbb"
+     * @param args 方法的参数名
      * @throws Exception 方法不存在或未被注册为 Pointcut, 会抛出异常
      */
-    public static void runAgentMethod(String methodName)throws Exception{
+    public static void runAgentMethod(String methodName, Object... args)throws Exception{
         if(POINTCUT_METHODS_MAP.get(methodName) != null){
-            INTERCEPTORS.get("cn.zay.demo.java.pojo.People.working").agent();
+            INTERCEPTORS.get("cn.zay.demo.java.pojo.People.working").agent(args);
         }else{
             throw new UnrecognizedPointcutMethodException("未能识别该["+methodName+"]Pointcut方法, 请确任该方法存在且被@Pointcut注释");
         }

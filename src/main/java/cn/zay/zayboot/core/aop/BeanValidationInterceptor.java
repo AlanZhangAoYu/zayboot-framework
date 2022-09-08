@@ -47,4 +47,8 @@ public class BeanValidationInterceptor extends Interceptor {
     public Object agent(){
         return null;
     }
+    @Override
+    public Object agent(Object[] args){
+        return null;
+    }
 }

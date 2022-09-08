@@ -26,6 +26,7 @@ public class InternallyAspectInterceptor extends Interceptor{
     }
     /**
      * 寻找与要被代理的 Pointcut方法匹配的所有 @Before和 @After并将其存入对应的列表中以备后续使用
+     * @throws Exception 方法不存在或未被注册为 Pointcut, 会抛出异常
      */
     private void init() throws Exception{
         for (String s : InterceptorFactory.BEFORE_METHODS_MAP.keySet()) {
@@ -63,8 +64,20 @@ public class InternallyAspectInterceptor extends Interceptor{
     }
     /**
      * 在方法执行器 methodInvocation前后执行 beforeMethods和 afterMethods中的方法, 完成 aop代理
+     * @param args 参数组
      * @return 返回原本被代理的方法的方法执行器的执行结果
      */
+    @Override
+    public Object agent(Object[] args){
+        for (MethodInvocation beforeMethod : beforeMethods) {
+            beforeMethod.run();
+        }
+        Object result = methodInvocation.run(args);
+        for (MethodInvocation afterMethod : afterMethods) {
+            afterMethod.run();
+        }
+        return result;
+    }
     @Override
     public Object agent(){
         for (MethodInvocation beforeMethod : beforeMethods) {
