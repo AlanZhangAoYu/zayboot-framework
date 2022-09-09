@@ -36,7 +36,7 @@ public class CglibAspectProxy implements MethodInterceptor {
 
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) {
-        MethodInvocation methodInvocation = new MethodInvocation(target, method, args);
+        MethodInvocation methodInvocation = new MethodInvocation(target, method);
         // the return value is still the result of the proxy class execution
         return interceptor.agent(methodInvocation);
     }

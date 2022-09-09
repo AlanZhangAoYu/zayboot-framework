@@ -22,8 +22,8 @@ public class People {
         log.info("人在上班");
     }
     @Pointcut
-    public String haveLunch(String time){
-        return "人在"+time+"吃午饭";
+    public void haveLunch(String time){
+        log.info("人在"+time+"吃午饭");
     }
     @After({"cn.zay.demo.java.pojo.People.working","cn.zay.demo.java.pojo.People.haveLunch"})
     public void goOffWork(){

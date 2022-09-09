@@ -2,6 +2,7 @@ package cn.zay.demo.java.pojo;
 
 import cn.zay.zayboot.annotation.aop.After;
 import cn.zay.zayboot.annotation.aop.Aspect;
+import cn.zay.zayboot.annotation.aop.Pointcut;
 import cn.zay.zayboot.annotation.ioc.Component;
 import lombok.extern.slf4j.Slf4j;
 /**
@@ -40,6 +41,7 @@ public class Student{
         log.info("学生{}在睡觉",name);
     }
     @Override
+    @Pointcut
     public String toString() {
         return "Student{" +
                 "name='" + name + '\'' +

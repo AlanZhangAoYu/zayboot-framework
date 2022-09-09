@@ -60,18 +60,18 @@ public class InterceptorFactory {
             //向那三个 Map中添加对应的 Pointcut、Before、After方法
             for (Method method : methods) {
                 if(method.isAnnotationPresent(Pointcut.class)){
-                    POINTCUT_METHODS_MAP.put(aClass.getName()+"."+method.getName(), new MethodInvocation(obj,method,null));
+                    POINTCUT_METHODS_MAP.put(aClass.getName()+"."+method.getName(), new MethodInvocation(obj,method));
                 }
                 if(method.isAnnotationPresent(Before.class)){
                     Before before = method.getAnnotation(Before.class);
                     String[] beforeValue = before.value();
-                    JoinPoint joinPoint = new JoinPoint(new MethodInvocation(obj,method,null),beforeValue);
+                    JoinPoint joinPoint = new JoinPoint(new MethodInvocation(obj,method),beforeValue);
                     BEFORE_METHODS_MAP.put(aClass.getName()+"."+method.getName(), joinPoint);
                 }
                 if(method.isAnnotationPresent(After.class)){
                     After after = method.getAnnotation(After.class);
                     String[] afterValue = after.value();
-                    JoinPoint joinPoint = new JoinPoint(new MethodInvocation(obj,method,null),afterValue);
+                    JoinPoint joinPoint = new JoinPoint(new MethodInvocation(obj,method),afterValue);
                     AFTER_METHODS_MAP.put(aClass.getName()+"."+method.getName(), joinPoint);
                 }
             }
@@ -86,16 +86,29 @@ public class InterceptorFactory {
         // 添加 Bean验证拦截器
         INTERCEPTORS.put("beanValidationInterceptor",new BeanValidationInterceptor());
     }
-
     /**
-     * 运行最终生成的代理方法
+     * 运行最终生成的代理方法(原被代理方法返回值为 void)
      * @param methodName 方法名, 格式为: "xxx.xxx.xx.Xxx.aaaBbb"
      * @param args 方法的参数名
      * @throws Exception 方法不存在或未被注册为 Pointcut, 会抛出异常
      */
-    public static void runAgentMethod(String methodName, Object... args)throws Exception{
+    public static void runProxyMethodWithReturnValueOfVoid(String methodName, Object... args)throws Exception{
         if(POINTCUT_METHODS_MAP.get(methodName) != null){
-            INTERCEPTORS.get("cn.zay.demo.java.pojo.People.working").agent(args);
+            INTERCEPTORS.get(methodName).agent(args);
+        }else{
+            throw new UnrecognizedPointcutMethodException("未能识别该["+methodName+"]Pointcut方法, 请确任该方法存在且被@Pointcut注释");
+        }
+    }
+    /**
+     * 运行最终生成的代理方法(原被代理方法返回值不为 void)
+     * @param methodName 方法名, 格式为: "xxx.xxx.xx.Xxx.aaaBbb"
+     * @param args 方法的参数名
+     * @return 返回原被代理方法运行的返回值
+     * @throws Exception 方法不存在或未被注册为 Pointcut, 会抛出异常
+     */
+    public static Object runProxyMethodWhoseReturnValueIsNotVoid(String methodName, Object... args)throws Exception{
+        if(POINTCUT_METHODS_MAP.get(methodName) != null){
+            return INTERCEPTORS.get(methodName).agent(args);
         }else{
             throw new UnrecognizedPointcutMethodException("未能识别该["+methodName+"]Pointcut方法, 请确任该方法存在且被@Pointcut注释");
         }

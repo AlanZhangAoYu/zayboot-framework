@@ -19,18 +19,18 @@ public class MethodInvocation {
     /**
      * 要被执行的方法的参数
      */
-    private final Object[] args;
-    public MethodInvocation(Object targetObject, Method targetMethod, Object[] args) {
+    private Object[] args;
+    public MethodInvocation(Object targetObject, Method targetMethod) {
         this.targetObject = targetObject;
         this.targetMethod = targetMethod;
-        this.args = args;
     }
     /**
      * 执行有参目标方法
      * @return 目标方法执行的结果
      */
     public Object run(Object[] args) {
-        return ReflectionUtil.executeTargetMethod(targetObject, targetMethod, args);
+        this.args = args;
+        return ReflectionUtil.executeTargetMethod(targetObject, targetMethod, this.args);
     }
     /**
      * 执行无参目标方法

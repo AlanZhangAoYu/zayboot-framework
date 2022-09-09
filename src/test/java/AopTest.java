@@ -16,8 +16,9 @@ public class AopTest {
             BeanFactory.loadBeans();
             InterceptorFactory.loadInterceptors(packageNames);
             InterceptorFactory.INTERCEPTORS.get("cn.zay.demo.java.pojo.People.working").agent();
-            InterceptorFactory.runAgentMethod("cn.zay.demo.java.pojo.People.working");
-            InterceptorFactory.runAgentMethod("cn.zay.demo.java.pojo.People.haveLunch","12:00");
+            InterceptorFactory.runProxyMethodWithReturnValueOfVoid("cn.zay.demo.java.pojo.People.working");
+            InterceptorFactory.runProxyMethodWithReturnValueOfVoid("cn.zay.demo.java.pojo.People.haveLunch", "12:00");
+            log.info((String)InterceptorFactory.runProxyMethodWhoseReturnValueIsNotVoid("cn.zay.demo.java.pojo.Student.toString"));
         }catch (Exception e){
             log.error("异常!",e);
         }
