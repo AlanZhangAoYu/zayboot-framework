@@ -33,10 +33,10 @@ public class AutowiredBeanInitialization {
     }
 
     /**
-     * 处理目标 bean对象中被 @Autowired和 @Value注释的字段
+     * 处理目标 bean对象中被 @Autowired、 @Value和 @Qualifier注释的字段
      * 向该字段(属性)注入 BEANS中对应的对象
-     * @param beanInstance 目标bean对象
-     * @throws Exception 找不到bean异常
+     * @param beanInstance 目标 bean对象
+     * @throws Exception 找不到 bean异常
      */
     public void initialize(Object beanInstance) throws Exception{
         Class<?> beanClass = beanInstance.getClass();
@@ -55,14 +55,19 @@ public class AutowiredBeanInitialization {
                     Object beanFieldInstance = processValueAnnotationField(beanField);
                     ReflectionUtil.setField(beanInstance, beanField, beanFieldInstance);
                 }
+                if (beanField.isAnnotationPresent(Qualifier.class)){
+                    Object beanFieldInstance = processQualifierAnnotationField(beanField);
+                    ReflectionUtil.setField(beanInstance, beanField, beanFieldInstance);
+                }
             }
         }
     }
 
     /**
      * 根据 bean中的字段(属性)在 BEANS容器中查找对应 bean, 准备注入
-     * @param beanField 目标类的字段
-     * @return 目标类的字段对应的对象
+     * @param beanField 要注入的字段
+     * @return 要注入的字段对应的对象
+     * @throws Exception 可能出现找不到 bean异常
      */
     private Object processAutowiredAnnotationField(Field beanField) throws Exception{
         Class<?> beanFieldClass = beanField.getType();
@@ -94,9 +99,27 @@ public class AutowiredBeanInitialization {
     }
 
     /**
+     * 根据 @Qualifier中的值(bean名称)在 BEANS中查找指定的 bean对象, 准备注入
+     * @param beanFiled 要注入的字段
+     * @return 要注入的字段对应的对象
+     * @throws Exception 可能出现找不到 bean异常
+     */
+    private Object processQualifierAnnotationField(Field beanFiled) throws Exception{
+        Qualifier qualifier=beanFiled.getAnnotation(Qualifier.class);
+        String beanName = qualifier.value();
+        //该方法的核心语句
+        Object beanFieldInstance = BeanFactory.BEANS.get(beanName);
+        if (beanFieldInstance == null) {
+            throw new NoSuchBeanDefinitionException("找不到这个bean:" + beanName);
+        }
+        return beanFieldInstance;
+    }
+
+    /**
      * 根据 @Value注解的 key在配置文件中寻找对应的值, 准备注入
      * @param beanField 目标类的字段
      * @return 目标类的字段对应的对象
+     * @throws Exception 可能出现找不到 bean异常
      */
     private Object processValueAnnotationField(Field beanField) throws Exception{
         //此时获取到的key的格式为 "${xxx.xxx.Xxx}"
