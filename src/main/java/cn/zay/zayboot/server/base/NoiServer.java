@@ -1,4 +1,4 @@
-package cn.zay.zayboot.server;
+package cn.zay.zayboot.server.base;
 
 import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ import java.util.Set;
  */
 @Slf4j
 public class NoiServer {
-    private static final List<SocketChannel> channelList = new LinkedList<>();
+    private static final List<SocketChannel> CHANNEL_LIST = new LinkedList<>();
     public static void main(String[] args) {
         try {
             ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
@@ -38,7 +39,9 @@ public class NoiServer {
                 selector.select();
                 //这里是核心!!! selectionKeys获取到的是真正有事件发生的连接的集合, 每次遍历这个集合, 可以的大大提高效率
                 Set<SelectionKey> selectionKeys = selector.selectedKeys();
-                for (SelectionKey selectionKey : selectionKeys) {
+                Iterator<SelectionKey> iterator = selectionKeys.iterator();
+                while(iterator.hasNext()) {
+                    SelectionKey selectionKey = iterator.next();
                     if(selectionKey.isAcceptable()){
                         //如果是客户端连接事件, 就进行连接获取和事件注册
                         ServerSocketChannel server = (ServerSocketChannel) selectionKey.channel();
@@ -68,15 +71,15 @@ public class NoiServer {
                     log.info("连接成功!");
                     //设置socketChannel为非阻塞
                     socketChannel.configureBlocking(false);
-                    channelList.add(socketChannel);
+                    CHANNEL_LIST.add(socketChannel);
                 }
-                for (SocketChannel channel : channelList) {
+                for (SocketChannel channel : CHANNEL_LIST) {
                     ByteBuffer byteBuffer = ByteBuffer.allocate(128);
                     int len = channel.read(byteBuffer);
                     if(len > 0){
                         log.info("接收到消息:"+ new String(byteBuffer.array()));
                     }else if(len == -1){
-                        channelList.remove(channel);
+                        CHANNEL_LIST.remove(channel);
                         log.info("客户端断开连接");
                     }
                 }*/

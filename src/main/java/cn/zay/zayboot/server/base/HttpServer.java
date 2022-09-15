@@ -1,4 +1,4 @@
-package cn.zay.zayboot.server;
+package cn.zay.zayboot.server.base;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
