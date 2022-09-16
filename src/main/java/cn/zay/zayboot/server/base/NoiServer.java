@@ -63,7 +63,7 @@ public class NoiServer {
                         }
                     }
                     //从事件集合里删除本次处理的key, 防止下次selector重复处理
-                    selectionKeys.remove(selectionKey);
+                    iterator.remove();
                 }
                 /*SocketChannel socketChannel = serverSocketChannel.accept();
                 //如果有客户端连接

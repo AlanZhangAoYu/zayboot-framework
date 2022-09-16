@@ -29,7 +29,7 @@ public class ChatClient {
                     //使用匿名内部类初始化通道
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(SocketChannel ch) throws Exception {
+                        protected void initChannel(SocketChannel ch){
                             ChannelPipeline pipeline = ch.pipeline();
                             pipeline.addLast("decoder",new StringDecoder());
                             pipeline.addLast("encoder",new StringEncoder());
