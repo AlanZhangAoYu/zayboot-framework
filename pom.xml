@@ -80,6 +80,12 @@
             <version>1.18.24</version>
             <scope>provided</scope>
         </dependency>
+        <!-- 简单编码器和解码器，如Base64和十六进制 -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.15</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

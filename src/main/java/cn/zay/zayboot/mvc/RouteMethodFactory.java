@@ -4,7 +4,7 @@ import cn.zay.zayboot.annotation.springmvc.GetMapping;
 import cn.zay.zayboot.annotation.springmvc.PostMapping;
 import cn.zay.zayboot.annotation.springmvc.RestController;
 import cn.zay.zayboot.core.ioc.BeanFactory;
-import cn.zay.zayboot.util.StringUtil;
+import cn.zay.zayboot.util.UrlUtil;
 import io.netty.handler.codec.http.HttpMethod;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ public class RouteMethodFactory {
      */
     private static final Map<HttpMethod, Map<String, Method>> REQUEST_METHOD_MAP = new HashMap<>(2);
     /**
-     * key : http method, value : formatted url -> original url
+     * key : http方法, value : 格式化后的 url -> 原始的 url
      */
     private static final Map<HttpMethod, Map<String, String>> REQUEST_URL_MAP = new HashMap<>(2);
     static {
@@ -55,11 +55,16 @@ public class RouteMethodFactory {
             }
         }
     }
+    public static MappingMethodDetail getMethodDetail(String requestPath, HttpMethod httpMethod) {
+        MappingMethodDetail mappingMethodDetail = new MappingMethodDetail();
+        mappingMethodDetail.build(requestPath, REQUEST_METHOD_MAP.get(httpMethod), REQUEST_URL_MAP.get(httpMethod));
+        return mappingMethodDetail;
+    }
     /**
      * correspond url to method
      */
     private static void mapUrlToMethod(String url, Method method, HttpMethod httpMethod) {
-        String formattedUrl = StringUtil.formatUrl(url);
+        String formattedUrl = UrlUtil.formatUrl(url);
         Map<String, Method> urlToMethodMap = REQUEST_METHOD_MAP.get(httpMethod);
         Map<String, String> formattedUrlToUrlMap = REQUEST_URL_MAP.get(httpMethod);
         if (urlToMethodMap.containsKey(formattedUrl)) {
