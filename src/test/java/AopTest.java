@@ -1,5 +1,7 @@
+import cn.zay.demo.java.pojo.People;
 import cn.zay.demo.java.pojo.Student;
 import cn.zay.zayboot.core.aop.InterceptorFactory;
+import cn.zay.zayboot.core.aop.cglib.CglibProxyFactory;
 import cn.zay.zayboot.core.ioc.BeanFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,19 @@ public class AopTest {
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
             log.info(aClass.getName()+"."+method.getName());
+        }
+    }
+    @Test
+    public void test3(){
+        try {
+            String[] packageNames=new String[]{"cn.zay.demo.java.pojo"};
+            BeanFactory.loadClass(packageNames);
+            BeanFactory.loadBeans();
+            InterceptorFactory.loadInterceptors(packageNames);
+            People people = (People) CglibProxyFactory.getProxy(People.class);
+            people.working();
+        }catch (Exception e){
+            log.error("异常!",e);
         }
     }
 }
