@@ -45,7 +45,6 @@ public class ReflectionUtil {
         try {
             return cls.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            //throw new IllegalStateException(e.getMessage(), e);
             log.error("异常!",e);
         }
         return null;
@@ -65,7 +64,7 @@ public class ReflectionUtil {
         }
     }
     /**
-     * 执行目标方法
+     * 执行有返回值的目标方法
      * @param targetObject 目标类
      * @param method 目标方法
      * @param args 方法参数
@@ -80,7 +79,7 @@ public class ReflectionUtil {
         return null;
     }
     /**
-     * 执行void方法
+     * 执行没有返回值的 void方法
      * @param targetObject 目标类
      * @param method 目标方法
      * @param args 目标参数
