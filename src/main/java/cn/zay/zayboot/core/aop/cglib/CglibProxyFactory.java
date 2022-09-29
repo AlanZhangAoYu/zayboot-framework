@@ -15,7 +15,7 @@ public class CglibProxyFactory {
         Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader(clazz.getClassLoader());
         enhancer.setSuperclass(proxySuperClass);
-        enhancer.setCallback(new CglibAspectProxy());
+        enhancer.setCallback(new CglibAspectProxy(clazz.getName()));
         return enhancer.create();
     }
 }

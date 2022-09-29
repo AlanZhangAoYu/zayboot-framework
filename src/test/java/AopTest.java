@@ -42,6 +42,7 @@ public class AopTest {
             InterceptorFactory.loadInterceptors(packageNames);
             People people = (People) CglibProxyFactory.getProxy(People.class);
             people.working();
+            people.haveLunch("12:00");
         }catch (Exception e){
             log.error("异常!",e);
         }
