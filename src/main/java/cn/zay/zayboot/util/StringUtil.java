@@ -42,7 +42,7 @@ public class StringUtil {
                 return str.substring(2,str.length()-1).trim();
             }
         }
-        throw new IllegalParameterFormatException("传入的参数不合法!");
+        throw new IllegalParameterFormatException("传入的参数不合法!["+str+"]必须以'#{}'或'${}'包裹");
     }
     /**
      * 根据给定模式匹配字符串, 支持以下简单图案样式: "xxx*"、"*xxx*"、"*xxx*"、"xxx*yyy"

@@ -27,8 +27,19 @@ public class PropertiesResourceLoader extends AbstractResourceLoader{
     protected Map<String, String> loadResources(Path path) throws IOException {
         //参考: https://blog.csdn.net/cece_2012/article/details/7522964
         Properties properties = new Properties();
-        try (InputStream stream = Files.newInputStream(path); Reader reader = new InputStreamReader(stream)) {
+        InputStream stream = null;
+        Reader reader = null;
+        try {
+            stream = Files.newInputStream(path);
+            reader = new InputStreamReader(stream);
             properties.load(reader);
+        }finally {
+            if(reader != null){
+                reader.close();
+            }
+            if(stream != null){
+                stream.close();
+            }
         }
         Map<String, String> resource = new HashMap<>(properties.size());
         /*
