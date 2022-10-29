@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class MvcMappingTest {
     @Test
     public void test1(){
-        log.info(UrlUtil.formatUrl("/user/{name}"));
+        log.info(UrlUtil.formatUrl("/user/{userId}"));
     }
     @Test
     public void test2(){

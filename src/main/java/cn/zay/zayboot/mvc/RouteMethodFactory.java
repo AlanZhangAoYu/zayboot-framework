@@ -32,24 +32,25 @@ public class RouteMethodFactory {
         }
     }
     public static void loadRoutes() {
+        //获取所有被 @RestController注释的类
         Set<Class<?>> classes = BeanFactory.CLASSES.get(RestController.class);
         for (Class<?> aClass : classes) {
             RestController restController = aClass.getAnnotation(RestController.class);
-            if (null != restController) {
-                Method[] methods = aClass.getDeclaredMethods();
-                String baseUrl = restController.value();
-                for (Method method : methods) {
-                    if (method.isAnnotationPresent(GetMapping.class)) {
-                        GetMapping getMapping = method.getAnnotation(GetMapping.class);
-                        if (getMapping != null) {
-                            mapUrlToMethod(baseUrl + getMapping.value(), method, HttpMethod.GET);
-                        }
+            //获取 @RestController中设置的value值 (前置url)
+            String baseUrl = restController.value();
+            //获取当前 Controller类中的所有方法
+            Method[] methods = aClass.getDeclaredMethods();
+            for (Method method : methods) {
+                if (method.isAnnotationPresent(GetMapping.class)) {
+                    GetMapping getMapping = method.getAnnotation(GetMapping.class);
+                    if (getMapping != null) {
+                        mapUrlToMethod(baseUrl + getMapping.value(), method, HttpMethod.GET);
                     }
-                    if (method.isAnnotationPresent(PostMapping.class)) {
-                        PostMapping postMapping = method.getAnnotation(PostMapping.class);
-                        if (postMapping != null) {
-                            mapUrlToMethod(baseUrl + postMapping.value(), method, HttpMethod.POST);
-                        }
+                }
+                if (method.isAnnotationPresent(PostMapping.class)) {
+                    PostMapping postMapping = method.getAnnotation(PostMapping.class);
+                    if (postMapping != null) {
+                        mapUrlToMethod(baseUrl + postMapping.value(), method, HttpMethod.POST);
                     }
                 }
             }
@@ -61,7 +62,10 @@ public class RouteMethodFactory {
         return mappingMethodDetail;
     }
     /**
-     * correspond url to method
+     * 将 url对应到方法
+     * @param url 该方法对应的 url, 例如 /core/student/selectAllStudent或 /core/student/getStudent/{studentId}
+     * @param method 要对应处理的方法
+     * @param httpMethod 该方法为哪种请求方式, Get/Post
      */
     private static void mapUrlToMethod(String url, Method method, HttpMethod httpMethod) {
         String formattedUrl = UrlUtil.formatUrl(url);
