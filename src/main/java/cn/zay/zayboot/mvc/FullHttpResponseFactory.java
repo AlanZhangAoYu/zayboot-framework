@@ -24,7 +24,7 @@ public class FullHttpResponseFactory {
             ReflectionUtil.executeTargetMethodNoResult(targetObject, targetMethod, targetMethodParams.toArray());
             return buildSuccessResponse();
         } else {
-            //如果 targetMethod的返回类型不为 void, 一般大多都会执行这个分支
+            //如果 targetMethod的返回类型不为 void (一般大多都会执行这个分支)
             Object result = ReflectionUtil.executeTargetMethod(targetObject, targetMethod, targetMethodParams.toArray());
             return buildSuccessResponse(result);
         }

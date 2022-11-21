@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * 封装 uri映射与具体 Java方法
+ * 对一个请求的封装
  * @author ZAY
  */
 @Data

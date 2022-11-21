@@ -1,4 +1,6 @@
 import cn.zay.demo.java.pojo.Student;
+import cn.zay.zayboot.core.ioc.BeanFactory;
+import cn.zay.zayboot.mvc.RouteMethodFactory;
 import cn.zay.zayboot.util.DateUtil;
 import cn.zay.zayboot.util.JsonUtil;
 import cn.zay.zayboot.util.UrlUtil;
@@ -27,5 +29,19 @@ public class MvcMappingTest {
         // test4的运行结果
         byte[] bytes = new byte[]{123, 34, 97, 103, 101, 34, 58, 48, 44, 34, 110, 97, 109, 101, 34, 58, 34, 90, 65, 89, 34, 125};
         log.info("{}",JsonUtil.deserialize(bytes, Student.class));
+    }
+    @Test
+    public void test6(){
+        String[] path = new String[]{"cn.zay.demo.java.controller"};
+        try {
+            BeanFactory.loadClass(path);
+            BeanFactory.loadBeans();
+            BeanFactory.automaticInjection(path);
+            RouteMethodFactory.loadRoutes();
+            log.info("{}",RouteMethodFactory.getRequestMethodMap());
+            log.info("{}",RouteMethodFactory.getRequestUrlMap());
+        } catch (Exception e) {
+            log.error("异常!",e);
+        }
     }
 }

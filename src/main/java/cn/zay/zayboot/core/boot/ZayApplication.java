@@ -4,6 +4,7 @@ import cn.zay.zayboot.annotation.boot.ComponentScan;
 import cn.zay.zayboot.core.aop.InterceptorFactory;
 import cn.zay.zayboot.core.aop.MethodInvocation;
 import cn.zay.zayboot.core.ioc.BeanFactory;
+import cn.zay.zayboot.server.HttpServer;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -32,6 +33,8 @@ public class ZayApplication {
             //加载 Aop拦截器
             InterceptorFactory.loadInterceptors(packageNames);
             log.info(BeanFactory.BEANS.toString());
+            HttpServer httpServer = new HttpServer();
+            httpServer.start();
         }catch (Exception e){
             log.error("异常",e);
         }

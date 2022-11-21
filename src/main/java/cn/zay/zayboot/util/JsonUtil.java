@@ -25,4 +25,7 @@ public class JsonUtil {
     public static <T> T deserialize(byte[] bytes, Class<T> clazz){
         return JSON.parseObject(bytes, clazz);
     }
+    public static <T> T deserialize(String jsonStr, Class<T> clazz){
+        return JSON.parseObject(jsonStr, clazz);
+    }
 }
