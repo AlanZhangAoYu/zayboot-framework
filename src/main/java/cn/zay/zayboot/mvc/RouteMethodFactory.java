@@ -65,6 +65,12 @@ public class RouteMethodFactory {
             }
         }
     }
+    /**
+     * 通过请求路径 (例如 /student)和请求类型获取封装好的方法
+     * @param requestPath
+     * @param httpMethod
+     * @return
+     */
     public static MappingMethodDetail getMethodDetail(String requestPath, HttpMethod httpMethod) {
         MappingMethodDetail mappingMethodDetail = new MappingMethodDetail();
         mappingMethodDetail.build(requestPath, REQUEST_METHOD_MAP.get(httpMethod), REQUEST_URL_MAP.get(httpMethod));

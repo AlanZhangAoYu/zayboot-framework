@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * 对一个请求的封装
+ * 对一个请求地址 uri与一个 controller方法的封装
  * @author ZAY
  */
 @Data

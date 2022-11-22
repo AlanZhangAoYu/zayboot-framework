@@ -23,9 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Handle get request
- *
- * @author shuang.kou
+ * 处理 get请求的处理器
+ * @author ZAY
  */
 @Slf4j
 public class GetRequestHandler implements RequestHandler {
@@ -66,8 +65,8 @@ public class GetRequestHandler implements RequestHandler {
      * @return 参数名与参数值的映射
      */
     private Map<String, String> getQueryParams(String uri) {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(uri, Charsets.toCharset(CharEncoding.UTF_8));
-        Map<String, List<String>> parameters = queryDecoder.parameters();
+        //返回 URI的已解码键值参数对
+        Map<String, List<String>> parameters = UrlUtil.getRequestParameters(uri);
         Map<String, String> resultMap = new HashMap<>(6);
         for (Map.Entry<String, List<String>> attr : parameters.entrySet()) {
             for (String attrVal : attr.getValue()) {

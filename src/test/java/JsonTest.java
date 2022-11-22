@@ -13,4 +13,13 @@ public class JsonTest {
         log.debug("{}",JsonUtil.deserialize("{'name': 'XXX', 'age': 15}", Student.class));
         log.debug("{}",JsonUtil.deserialize("{'name': 'XXX', 'age': 15}".getBytes(StandardCharsets.UTF_8), Student.class));
     }
+    @Test
+    public void test2(){
+        log.info("{}",JsonUtil.serialize(new Student()));
+    }
+    @Test
+    public void test3(){
+        byte[] bytes = new byte[]{123, 34, 97, 103, 101, 34, 58, 48, 44, 34, 110, 97, 109, 101, 34, 58, 34, 90, 65, 89, 34, 125};
+        log.info("{}",JsonUtil.deserialize(bytes, Student.class));
+    }
 }

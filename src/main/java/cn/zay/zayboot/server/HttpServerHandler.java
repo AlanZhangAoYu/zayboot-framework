@@ -31,20 +31,23 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
         if (uri.equals(FAVICON_ICO)) {
             return;
         }
+        //根据请求的类型获取对应的请求处理器
         RequestHandler requestHandler = RequestHandlerFactory.get(fullHttpRequest.method());
         FullHttpResponse fullHttpResponse;
         try {
+            //核心!! 处理请求, 返回响应
             fullHttpResponse = requestHandler.handle(fullHttpRequest);
         } catch (Throwable e) {
             log.error("异常!!", e);
+            //遇到异常, 返回错误响应体, 并返回500错误
             String requestPath = UrlUtil.getRequestPath(fullHttpRequest.uri());
             fullHttpResponse = FullHttpResponseFactory.getErrorResponse(requestPath, e.toString(), HttpResponseStatus.INTERNAL_SERVER_ERROR);
         }
+        log.debug("要返回的响应体:{}",fullHttpResponse);
         boolean keepAlive = HttpUtil.isKeepAlive(fullHttpRequest);
         if (!keepAlive) {
             ctx.write(fullHttpResponse).addListener(ChannelFutureListener.CLOSE);
         } else {
-            log.debug("要返回的响应体:{}",fullHttpResponse);
             fullHttpResponse.headers().set(CONNECTION, KEEP_ALIVE);
             ctx.write(fullHttpResponse);
         }
