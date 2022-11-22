@@ -11,7 +11,8 @@ public interface RequestHandler {
     /**
      * 请求的接收与处理并返回响应
      * @param fullHttpRequest Netty封装的请求
+     * @throws Exception 可能返回资源未找到异常
      * @return Netty封装的响应
      */
-    FullHttpResponse handle(FullHttpRequest fullHttpRequest);
+    FullHttpResponse handle(FullHttpRequest fullHttpRequest) throws Exception;
 }

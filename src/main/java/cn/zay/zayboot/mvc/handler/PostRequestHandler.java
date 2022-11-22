@@ -1,6 +1,7 @@
 package cn.zay.zayboot.mvc.handler;
 
 import cn.zay.zayboot.core.ioc.BeanFactory;
+import cn.zay.zayboot.exception.ResourceNotFoundException;
 import cn.zay.zayboot.mvc.FullHttpResponseFactory;
 import cn.zay.zayboot.mvc.MappingMethodDetail;
 import cn.zay.zayboot.mvc.ParameterResolverFactory;
@@ -20,22 +21,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 处理 post请求的处理器
  * @author ZAY
  */
 @Slf4j
 public class PostRequestHandler implements RequestHandler {
 
     @Override
-    public FullHttpResponse handle(FullHttpRequest fullHttpRequest) {
+    public FullHttpResponse handle(FullHttpRequest fullHttpRequest) throws Exception{
         String requestUri = fullHttpRequest.uri();
-        log.debug("post请求的uri路径:{}",requestUri);
         // get http request path，such as "/user"
         String requestPath = UrlUtil.getRequestPath(requestUri);
         // get target method
         MappingMethodDetail methodDetail = RouteMethodFactory.getMethodDetail(requestPath, HttpMethod.POST);
         Method targetMethod = methodDetail.getMethod();
         if (targetMethod == null) {
-            return null;
+            throw new ResourceNotFoundException("请求的资源["+requestUri+"]不存在");
         }
         String contentType = this.getContentType(fullHttpRequest.headers());
         // target method parameters.

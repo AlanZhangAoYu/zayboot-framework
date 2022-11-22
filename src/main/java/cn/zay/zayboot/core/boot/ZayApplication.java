@@ -4,6 +4,7 @@ import cn.zay.zayboot.annotation.boot.ComponentScan;
 import cn.zay.zayboot.core.aop.InterceptorFactory;
 import cn.zay.zayboot.core.aop.MethodInvocation;
 import cn.zay.zayboot.core.ioc.BeanFactory;
+import cn.zay.zayboot.mvc.RouteMethodFactory;
 import cn.zay.zayboot.server.HttpServer;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,9 +33,14 @@ public class ZayApplication {
             BeanFactory.automaticInjection(packageNames);
             //加载 Aop拦截器
             InterceptorFactory.loadInterceptors(packageNames);
-            log.info(BeanFactory.BEANS.toString());
-            HttpServer httpServer = new HttpServer();
-            httpServer.start();
+            //加载 MVC控制器
+            RouteMethodFactory.loadRoutes();
+            log.info("BEANS容器中的内容:{}",BeanFactory.BEANS);
+            log.info("CLASSES容器中的内容:{}",BeanFactory.CLASSES);
+            log.info("REQUEST_METHOD_MAP容器中的内容:{}", RouteMethodFactory.getRequestMethodMap());
+            log.info("REQUEST_URL_MAP容器中的内容:{}", RouteMethodFactory.getRequestUrlMap());
+            //启动 Netty服务器
+            HttpServer.start();
         }catch (Exception e){
             log.error("异常",e);
         }

@@ -11,11 +11,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * 参考 https://www.cnblogs.com/xiaoqi/p/SnakeYAML.html
  * @author ZAY
  * .yml 或 .yaml 文件加载读取
  */
 public class YamlResourceLoader extends AbstractResourceLoader{
-    //参考 https://www.cnblogs.com/xiaoqi/p/SnakeYAML.html
+    /**
+     * 读取 path路径下的 .yml或 .yaml文件, 生成类似于:
+     * {server.port=8080, server.application.name=ZAYdemo,
+     *  server.application.url=http://zaydemo.com, student.name=张傲宇, student.age=21}
+     * 这样的 Map
+     */
     @Override
     protected Map<String, String> loadResources(Path path) throws IOException {
         Map<String, String> result = new LinkedHashMap<>();

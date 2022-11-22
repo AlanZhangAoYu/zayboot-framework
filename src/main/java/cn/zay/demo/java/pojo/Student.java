@@ -3,6 +3,7 @@ package cn.zay.demo.java.pojo;
 import cn.zay.zayboot.annotation.aop.After;
 import cn.zay.zayboot.annotation.aop.Aspect;
 import cn.zay.zayboot.annotation.aop.Pointcut;
+import cn.zay.zayboot.annotation.config.Value;
 import cn.zay.zayboot.annotation.ioc.Component;
 import lombok.extern.slf4j.Slf4j;
 /**
@@ -12,12 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 @Aspect
 @Component(name = "ZAY")
 public class Student{
+    @Value("${student.name}")
     private String name;
+    @Value("${student.age}")
     private int age;
-    public Student(){
-        this.name = "ZAY";
-        this.age = 0;
-    }
     public int getAge() {
         return age;
     }

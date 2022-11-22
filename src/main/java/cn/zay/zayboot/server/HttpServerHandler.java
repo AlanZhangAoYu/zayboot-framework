@@ -1,5 +1,6 @@
 package cn.zay.zayboot.server;
 
+import cn.zay.zayboot.exception.ResourceNotFoundException;
 import cn.zay.zayboot.mvc.FullHttpResponseFactory;
 import cn.zay.zayboot.mvc.RequestHandlerFactory;
 import cn.zay.zayboot.mvc.handler.RequestHandler;
@@ -15,15 +16,13 @@ import io.netty.util.AsciiString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author shuang.kou
- * @createTime 2020年09月23日 17:33:00
- **/
+ * @author ZAY
+ */
 @Slf4j
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
     private static final String FAVICON_ICO = "/favicon.ico";
     private static final AsciiString CONNECTION = AsciiString.cached("Connection");
     private static final AsciiString KEEP_ALIVE = AsciiString.cached("keep-alive");
-
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest) {
         log.info("要处理的Http请求:{}", fullHttpRequest);
@@ -37,9 +36,13 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
         try {
             //核心!! 处理请求, 返回响应
             fullHttpResponse = requestHandler.handle(fullHttpRequest);
+        } catch (ResourceNotFoundException e){
+            //捕获到资源未找到异常, 就返回 404错误
+            String requestPath = UrlUtil.getRequestPath(fullHttpRequest.uri());
+            fullHttpResponse = FullHttpResponseFactory.getErrorResponse(requestPath, e.toString(), HttpResponseStatus.NOT_FOUND);
         } catch (Throwable e) {
             log.error("异常!!", e);
-            //遇到异常, 返回错误响应体, 并返回500错误
+            //遇到未知异常, 就返回 500错误
             String requestPath = UrlUtil.getRequestPath(fullHttpRequest.uri());
             fullHttpResponse = FullHttpResponseFactory.getErrorResponse(requestPath, e.toString(), HttpResponseStatus.INTERNAL_SERVER_ERROR);
         }

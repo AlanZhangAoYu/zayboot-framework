@@ -3,6 +3,9 @@ package cn.zay.demo.java.pojo;
 import cn.zay.zayboot.annotation.config.Value;
 import cn.zay.zayboot.annotation.ioc.Component;
 
+/**
+ * @author ZAY
+ */
 @Component
 public class Server {
     @Value("${server.port}")

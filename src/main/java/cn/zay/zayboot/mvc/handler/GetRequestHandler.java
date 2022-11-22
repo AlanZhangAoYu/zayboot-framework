@@ -1,6 +1,7 @@
 package cn.zay.zayboot.mvc.handler;
 
 import cn.zay.zayboot.core.ioc.BeanFactory;
+import cn.zay.zayboot.exception.ResourceNotFoundException;
 import cn.zay.zayboot.mvc.FullHttpResponseFactory;
 import cn.zay.zayboot.mvc.MappingMethodDetail;
 import cn.zay.zayboot.mvc.ParameterResolverFactory;
@@ -29,9 +30,8 @@ import java.util.Map;
 @Slf4j
 public class GetRequestHandler implements RequestHandler {
     @Override
-    public FullHttpResponse handle(FullHttpRequest fullHttpRequest) {
+    public FullHttpResponse handle(FullHttpRequest fullHttpRequest) throws Exception{
         String requestUri = fullHttpRequest.uri();
-        log.debug("get请求的uri路径:{}",requestUri);
         Map<String, String> queryParameterMappings = getQueryParams(requestUri);
         // get http request path，such as "/user"
         String requestPath = UrlUtil.getRequestPath(requestUri);
@@ -40,7 +40,7 @@ public class GetRequestHandler implements RequestHandler {
         methodDetail.setQueryParameterMappings(queryParameterMappings);
         Method targetMethod = methodDetail.getMethod();
         if (targetMethod == null) {
-            return null;
+            throw new ResourceNotFoundException("请求的资源["+requestUri+"]不存在");
         }
         log.debug("requestPath -> target method [{}]", targetMethod.getName());
         Parameter[] targetMethodParameters = targetMethod.getParameters();

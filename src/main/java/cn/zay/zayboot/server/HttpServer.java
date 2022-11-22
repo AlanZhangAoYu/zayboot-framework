@@ -23,8 +23,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class HttpServer {
-    private final int port = 8080;
-    public void start() {
+    private static final int port = 8080;
+    public static void start() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
