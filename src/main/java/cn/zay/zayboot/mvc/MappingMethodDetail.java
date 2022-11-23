@@ -1,9 +1,6 @@
 package cn.zay.zayboot.mvc;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,22 +11,19 @@ import java.util.regex.Pattern;
  * @author ZAY
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class MappingMethodDetail {
     private Method method;
     private Map<String, String> urlParameterMappings;
     private Map<String, String> queryParameterMappings;
     private String json;
-    public void build(String requestPath, Map<String, Method> requestMappings, Map<String, String> urlMappings) {
+    public MappingMethodDetail(String requestPath, Map<String, Method> requestMappings, Map<String, String> urlMappings){
         requestMappings.forEach((key, value) -> {
             //创建匹配 key的正则表达式的匹配模式
             Pattern pattern = Pattern.compile(key);
             if (pattern.matcher(requestPath).find()) {
-                this.setMethod(value);
+                this.method = value;
                 String url = urlMappings.get(key);
-                Map<String, String> urlParameterMappings = getUrlParameterMappings(requestPath, url);
-                this.setUrlParameterMappings(urlParameterMappings);
+                this.urlParameterMappings = getUrlParameterMappings(requestPath, url);
             }
         });
     }

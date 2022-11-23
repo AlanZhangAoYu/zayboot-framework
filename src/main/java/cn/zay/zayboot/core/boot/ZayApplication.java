@@ -2,7 +2,6 @@ package cn.zay.zayboot.core.boot;
 
 import cn.zay.zayboot.annotation.boot.ComponentScan;
 import cn.zay.zayboot.core.aop.InterceptorFactory;
-import cn.zay.zayboot.core.aop.MethodInvocation;
 import cn.zay.zayboot.core.ioc.BeanFactory;
 import cn.zay.zayboot.mvc.RouteMethodFactory;
 import cn.zay.zayboot.server.HttpServer;
