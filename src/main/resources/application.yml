@@ -1,8 +1,10 @@
+framework:
+  version: 1.0.0
 server:
-  port: 8080
+  port: 9090
   application:
     name: ZAYdemo
     url: http://zaydemo.com
 student:
-  name: 张傲宇
+  name: "张傲宇"
   age: 21

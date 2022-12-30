@@ -78,6 +78,5 @@ public class BeanFactoryTest {
         }catch (Exception e){
             log.error("异常",e);
         }
-
     }
 }

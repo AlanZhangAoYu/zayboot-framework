@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Test;
 public class BannerTest {
     @Test
     public void test1(){
-        Banner.print();
+        try {
+            Banner.print();
+        } catch (Exception e) {
+            log.error("异常!!",e);
+        }
     }
 }

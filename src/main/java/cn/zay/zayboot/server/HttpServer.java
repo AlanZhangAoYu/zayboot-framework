@@ -1,7 +1,7 @@
 package cn.zay.zayboot.server;
 
-import cn.zay.zayboot.annotation.config.Value;
-import cn.zay.zayboot.annotation.ioc.Component;
+import cn.zay.zayboot.core.config.ConfigurationManager;
+import cn.zay.zayboot.core.ioc.BeanFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -17,14 +17,28 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
+
 /**
  * @author shuang.kou
  * @createTime 2020年09月23日 17:05:00
  */
 @Slf4j
 public class HttpServer {
-    private static final int port = 8080;
+    private static int PORT;
+    /**
+     * 服务器初始化, 配置一些参数
+     */
+    private static void init(){
+        for (String configFile : ConfigurationManager.DEFAULT_CONFIG_FILENAMES) {
+            if (BeanFactory.BEANS.get(configFile) != null) {
+                HashMap<String,String> configMap = (HashMap<String,String>)BeanFactory.BEANS.get(configFile);
+                PORT = Integer.parseInt(configMap.get("server.port"));
+            }
+        }
+    }
     public static void start() {
+        init();
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -47,7 +61,8 @@ public class HttpServer {
                                     .addLast("handler", new HttpServerHandler());
                         }
                     });
-            Channel ch = b.bind(port).sync().channel();
+            log.info("服务器在{}端口启动\n",PORT);
+            Channel ch = b.bind(PORT).sync().channel();
             //log.info(SystemConstants.LOG_PORT_BANNER, PORT);
             ch.closeFuture().sync();
         } catch (InterruptedException e) {

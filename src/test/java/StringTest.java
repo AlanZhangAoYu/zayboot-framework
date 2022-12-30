@@ -27,6 +27,7 @@ public class StringTest {
     }
     @Test
     public void test4(){
-        log.debug("{}",StringUtil.simpleMatch("*Server*","studentServer"));
+        log.debug("{}",StringUtil.simpleMatch("\\$\\{[a-zA-Z0-9]+\\}",
+                "select * from order where createUser = ${createUser} and orderId = ${orderId}"));
     }
 }
