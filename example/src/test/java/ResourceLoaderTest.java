@@ -42,7 +42,7 @@ public class ResourceLoaderTest {
     }
     @Test
     public void configurationTest(){
-        BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+        BeanFactory.loadClass(new String[]{"pojo"});
         BeanFactory.loadBeans();
         ConfigurationManager configurationManager =new ConfigurationManager();
         List<Path> pathList=new ArrayList<>();
@@ -58,7 +58,7 @@ public class ResourceLoaderTest {
     }
     @Test
     public void valueInjectionTest(){
-        BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+        BeanFactory.loadClass(new String[]{"pojo"});
         BeanFactory.loadBeans();
         ConfigurationManager configurationManager =new ConfigurationManager();
         List<Path> pathList=new ArrayList<>();

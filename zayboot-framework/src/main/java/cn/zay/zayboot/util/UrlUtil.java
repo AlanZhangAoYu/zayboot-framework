@@ -9,6 +9,11 @@ import java.util.Map;
 
 /**
  * 与 url编解码处理有关的工具
+ * <p>Get请求 uri的格式可能有:</p>
+ * <p>Restful格式: /user/getUserInfo/{xxxxxx}, 这个要与 @PathVariable配合</p>
+ * <p>Restful格式: /user/{xxxxx}/{xxxxxx}, 这个要与 @PathVariable配合</p>
+ * <p>常规格式: /user/getUserInfo?name=xxxxx&age=11</p>
+ * <p>Post请求的 connect-type只支持 application/json格式</p>
  * @author ZAY
  */
 public class UrlUtil {

@@ -12,13 +12,13 @@ import pojo.StudentAutowired;
 public class BeanFactoryTest {
     @Test
     public void test1(){
-        BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+        BeanFactory.loadClass(new String[]{"pojo"});
         log.debug(BeanFactory.CLASSES.toString());
     }
     @Test
     public void test2(){
         try {
-            //这里为什么不能用Class.forName("cn.zay.demo.java.pojo")
+            //这里为什么不能用Class.forName("pojo.Student")
             log.debug(BeanFactory.getBeanName(Student.class));
         } catch (Exception e) {
             log.error("异常",e);
@@ -26,14 +26,14 @@ public class BeanFactoryTest {
     }
     @Test
     public void test3(){
-        BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+        BeanFactory.loadClass(new String[]{"pojo"});
         BeanFactory.loadBeans();
         log.debug(BeanFactory.BEANS.toString());
     }
     @Test
     public void test4(){
         try {
-            BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+            BeanFactory.loadClass(new String[]{"pojo"});
             BeanFactory.loadBeans();
             log.debug(BeanFactory.getBean("ZAY").toString());
         } catch (NoSuchBeanDefinitionException e) {
@@ -43,7 +43,7 @@ public class BeanFactoryTest {
     @Test
     public void test5(){
         try {
-            BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+            BeanFactory.loadClass(new String[]{"pojo"});
             BeanFactory.loadBeans();
             StudentAutowired studentAutowired=(StudentAutowired) BeanFactory.getBean("studentAutowired");
             AutowiredBeanInitialization autowiredBeanInitialization = new AutowiredBeanInitialization(new String[]{"cn.zay.demo.java.pojo"});
@@ -57,9 +57,9 @@ public class BeanFactoryTest {
     @Test
     public void test6(){
         try{
-            BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+            BeanFactory.loadClass(new String[]{"pojo"});
             BeanFactory.loadBeans();
-            BeanFactory.automaticInjection(new String[]{"cn.zay.demo.java.pojo"});
+            BeanFactory.automaticInjection(new String[]{"pojo"});
             log.debug(BeanFactory.BEANS.toString());
         }catch (Exception e){
             log.error("异常",e);
@@ -68,9 +68,9 @@ public class BeanFactoryTest {
     @Test
     public void test7(){
         try{
-            BeanFactory.loadClass(new String[]{"cn.zay.demo.java.pojo"});
+            BeanFactory.loadClass(new String[]{"pojo"});
             BeanFactory.loadBeans();
-            BeanFactory.automaticInjection(new String[]{"cn.zay.demo.java.pojo"});
+            BeanFactory.automaticInjection(new String[]{"pojo"});
             ClassA classA=(ClassA) BeanFactory.getBean("classA");
             ClassB classB=(ClassB) BeanFactory.getBean("classB");
             classA.showInfo();

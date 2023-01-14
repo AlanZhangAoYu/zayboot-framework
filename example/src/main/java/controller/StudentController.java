@@ -4,6 +4,7 @@ import cn.zay.zayboot.annotation.ioc.Autowired;
 import cn.zay.zayboot.annotation.ioc.Component;
 import cn.zay.zayboot.annotation.springmvc.GetMapping;
 import cn.zay.zayboot.annotation.springmvc.PostMapping;
+import cn.zay.zayboot.annotation.springmvc.RequestParam;
 import cn.zay.zayboot.annotation.springmvc.RestController;
 import com.alibaba.fastjson2.JSON;
 import pojo.Student;
@@ -21,7 +22,7 @@ public class StudentController {
         return JSON.toJSONString(ZAY);
     }
     @PostMapping("/setStudentInfo")
-    public String setStudentInfo(){
-        return "设置学生属性成功!";
+    public String setStudentInfo(@RequestParam("name") String name){
+        return "设置学生属性成功! 姓名为: "+name;
     }
 }

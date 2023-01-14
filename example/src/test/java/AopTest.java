@@ -13,14 +13,14 @@ public class AopTest {
     @Test
     public void test1(){
         try{
-            String[] packageNames=new String[]{"cn.zay.demo.java.pojo"};
+            String[] packageNames=new String[]{"pojo"};
             BeanFactory.loadClass(packageNames);
             BeanFactory.loadBeans();
             InterceptorFactory.loadInterceptors(packageNames);
-            InterceptorFactory.INTERCEPTORS.get("cn.zay.demo.java.pojo.People.working").agent();
-            InterceptorFactory.runProxyMethodWithReturnValueOfVoid("cn.zay.demo.java.pojo.People.working");
-            InterceptorFactory.runProxyMethodWithReturnValueOfVoid("cn.zay.demo.java.pojo.People.haveLunch", "12:00");
-            log.info((String)InterceptorFactory.runProxyMethodWhoseReturnValueIsNotVoid("cn.zay.demo.java.pojo.Student.toString"));
+            InterceptorFactory.INTERCEPTORS.get("pojo.People.working").agent();
+            InterceptorFactory.runProxyMethodWithReturnValueOfVoid("pojo.People.working");
+            InterceptorFactory.runProxyMethodWithReturnValueOfVoid("pojo.People.haveLunch", "12:00");
+            log.info((String)InterceptorFactory.runProxyMethodWhoseReturnValueIsNotVoid("pojo.Student.toString"));
         }catch (Exception e){
             log.error("异常!",e);
         }
@@ -36,7 +36,7 @@ public class AopTest {
     @Test
     public void test3(){
         try {
-            String[] packageNames=new String[]{"cn.zay.demo.java.pojo"};
+            String[] packageNames=new String[]{"pojo"};
             BeanFactory.loadClass(packageNames);
             BeanFactory.loadBeans();
             InterceptorFactory.loadInterceptors(packageNames);

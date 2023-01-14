@@ -13,16 +13,23 @@
     <artifactId>example</artifactId>
     <name>example</name>
     <version>1.0.0</version>
-    <packaging>jar</packaging> <!-- 注意此处要配置为jar -->
+    <packaging>jar</packaging>
     <description>用来测试 zayboot-framework框架的功能</description>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
     <dependencies>
+        <!--引入测试的框架-->
         <dependency>
             <groupId>cn.zay</groupId>
             <artifactId>zayboot-framework</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!--这里引入自定义的starter, 测试框架在启动时能不能自动在 BEANS容器中生成该starter指定的对象-->
+        <dependency>
+            <groupId>cn.zay</groupId>
+            <artifactId>example-starter</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

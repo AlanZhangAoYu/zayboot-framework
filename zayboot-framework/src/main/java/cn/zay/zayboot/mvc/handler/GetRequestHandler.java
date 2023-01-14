@@ -12,6 +12,10 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.QueryStringDecoder;
+import io.netty.handler.codec.http.multipart.DefaultHttpDataFactory;
+import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
+import io.netty.handler.codec.http.multipart.InterfaceHttpData;
+import io.netty.handler.codec.http.multipart.MemoryAttribute;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.codec.Charsets;
@@ -33,9 +37,9 @@ public class GetRequestHandler implements RequestHandler {
     public FullHttpResponse handle(FullHttpRequest fullHttpRequest) throws Exception{
         String requestUri = fullHttpRequest.uri();
         Map<String, String> queryParameterMappings = getQueryParams(requestUri);
-        // get http request path，such as "/user"
+        //获取当前请求的 uri, 例如: /user
         String requestPath = UrlUtil.getRequestPath(requestUri);
-        // get target method
+        //通过 uri获取到对应的 Controller方法的封装
         MappingMethodDetail methodDetail = RouteMethodFactory.getMethodDetail(requestPath, HttpMethod.GET);
         methodDetail.setQueryParameterMappings(queryParameterMappings);
         Method targetMethod = methodDetail.getMethod();
