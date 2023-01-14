@@ -1,0 +1,8 @@
+server:
+  port: 9090
+  application:
+    name: ZAYdemo
+    url: http://zaydemo.com
+student:
+  name: "张傲宇"
+  age: 21

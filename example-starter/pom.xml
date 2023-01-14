@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!--parent使用的即为父pom.xml的信息-->
+    <parent>
+        <groupId>cn.zay</groupId>
+        <artifactId>framework</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <!-- 此时只能指定子类的工程名, 版本号以及工程的路径要和父工程保持一致.这样才可以获取到其中的父工程pom.xml文件-->
+    <artifactId>example-starter</artifactId>
+    <name>example-starter</name>
+    <version>1.0.0</version>
+    <packaging>jar</packaging> <!-- 注意此处要配置为jar -->
+    <description>用来在 zayboot-framework框架中测试自动装配的自己写的第三方测试类</description>
+    <properties>
+
+    </properties>
+    <dependencies>
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
