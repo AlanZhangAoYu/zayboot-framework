@@ -17,7 +17,7 @@ public class RequestParamParameterResolver implements ParameterResolver {
     public Object resolve(MappingMethodDetail methodDetail, Parameter parameter) {
         RequestParam requestParam = parameter.getDeclaredAnnotation(RequestParam.class);
         String requestParameter = requestParam.value();
-        String requestParameterValue = methodDetail.getQueryParameterMappings().get(requestParameter);
+        String requestParameterValue = (String) methodDetail.getQueryParameterMap().get(requestParameter);
         if (requestParameterValue == null) {
             throw new IllegalArgumentException("The specified parameter " + requestParameter + " can not be null!");
         }

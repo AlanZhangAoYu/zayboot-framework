@@ -2,10 +2,7 @@ package controller;
 
 import cn.zay.zayboot.annotation.ioc.Autowired;
 import cn.zay.zayboot.annotation.ioc.Component;
-import cn.zay.zayboot.annotation.springmvc.GetMapping;
-import cn.zay.zayboot.annotation.springmvc.PostMapping;
-import cn.zay.zayboot.annotation.springmvc.RequestParam;
-import cn.zay.zayboot.annotation.springmvc.RestController;
+import cn.zay.zayboot.annotation.springmvc.*;
 import com.alibaba.fastjson2.JSON;
 import pojo.Student;
 
@@ -24,5 +21,9 @@ public class StudentController {
     @PostMapping("/setStudentInfo")
     public String setStudentInfo(@RequestParam("name") String name){
         return "设置学生属性成功! 姓名为: "+name;
+    }
+    @GetMapping("/getStudentInfoById/{id}")
+    public String getStudentInfoById(@PathVariable("id") String id){
+        return "获取id为"+id+"的学生的信息";
     }
 }

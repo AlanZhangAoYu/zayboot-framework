@@ -1,46 +1,69 @@
 package cn.zay.zayboot.mvc;
 
+import cn.zay.zayboot.core.ioc.BeanFactory;
+import cn.zay.zayboot.mvc.resolver.ParameterResolver;
+import cn.zay.zayboot.util.ObjectUtil;
+import cn.zay.zayboot.util.ReflectionUtil;
+import cn.zay.zayboot.util.UrlUtil;
+import io.netty.handler.codec.http.HttpMethod;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Parameter;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * 对一个请求地址 uri与一个 controller方法的封装
+ * 对一个请求地址 uri与其对应的 controller方法的封装
  * @author ZAY
  */
 @Data
 public class MappingMethodDetail {
+    /**
+     * 请求对应的 controller方法
+     */
     private Method method;
-    private Map<String, String> urlParameterMappings;
-    private Map<String, String> queryParameterMappings;
-    private String json;
-    public MappingMethodDetail(String requestPath, Map<String, Method> requestMappings, Map<String, String> urlMappings){
-        requestMappings.forEach((key, value) -> {
-            //创建匹配 key的正则表达式的匹配模式
-            Pattern pattern = Pattern.compile(key);
-            if (pattern.matcher(requestPath).find()) {
-                this.method = value;
-                String url = urlMappings.get(key);
-                this.urlParameterMappings = getUrlParameterMappings(requestPath, url);
-            }
-        });
+    /**
+     * 请求的 url中包含的参数信息
+     */
+    private Map<String, Object> urlParameterMap;
+    /**
+     * 请求体中包含的参数信息
+     */
+    private Map<String, Object> queryParameterMap;
+    public MappingMethodDetail(Method method, Map<String, Object> urlParameterMap, Map<String, Object> queryParameterMap) {
+        this.method = method;
+        this.urlParameterMap = urlParameterMap;
+        this.queryParameterMap = queryParameterMap;
     }
     /**
-     * 将请求路径参数与 URL参数匹配
-     * @param requestPath 传入的 uri地址与参数, 例如: "/user/1"
-     * @param url @GetMapping或 @PostMapping中设置的方法映射地址, 例如: "/user/{id}"
-     * @return {"id" -> "1","user" -> "user"}
+     * 运行该 method的方法
+     * @return
      */
-    private Map<String, String> getUrlParameterMappings(String requestPath, String url) {
-        String[] requestParams = requestPath.split("/");
-        String[] urlParams = url.split("/");
-        Map<String, String> urlParameterMappings = new HashMap<>(urlParams.length);
-        for (int i = 1; i < urlParams.length; i++) {
-            urlParameterMappings.put(urlParams[i].replace("{", "").replace("}", ""), requestParams[i]);
+    public Object run(){
+        //获取当前方法所属的对象
+        String beanName = BeanFactory.getBeanName(this.getMethod().getDeclaringClass());
+        Object targetObject = BeanFactory.BEANS.get(beanName);
+        //获取当前方法的参数, 保存在 methodParamList中
+        List<Object> methodParamList = new ArrayList<>();
+        if(!urlParameterMap.isEmpty()){
+            for (String s : urlParameterMap.keySet()) {
+                methodParamList.add(urlParameterMap.get(s));
+            }
         }
-        return urlParameterMappings;
+        if(!queryParameterMap.isEmpty()){
+            for (String s : queryParameterMap.keySet()) {
+                methodParamList.add(queryParameterMap.get(s));
+            }
+        }
+        if (this.method.getReturnType() == void.class) {
+            //如果 targetMethod的返回类型为 void
+            ReflectionUtil.executeTargetMethodNoResult(targetObject, this.method, methodParamList.toArray());
+            return "-0xffffff";
+        } else {
+            //如果 targetMethod的返回类型不为 void (一般大多都会执行这个分支)
+            return ReflectionUtil.executeTargetMethod(targetObject, method, methodParamList.toArray());
+        }
     }
 }
 

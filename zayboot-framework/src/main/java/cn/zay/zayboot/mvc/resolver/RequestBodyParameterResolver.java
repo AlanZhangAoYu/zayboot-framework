@@ -21,7 +21,7 @@ public class RequestBodyParameterResolver implements ParameterResolver {
         RequestBody requestBody = parameter.getDeclaredAnnotation(RequestBody.class);
         if (requestBody != null) {
             //param = JSON.parseObject(methodDetail.getJson(), parameter.getType());
-            param = JsonUtil.deserialize(methodDetail.getJson(), parameter.getType());
+            //param = JsonUtil.deserialize(methodDetail.getJson(), parameter.getType());
         }
         return param;
     }

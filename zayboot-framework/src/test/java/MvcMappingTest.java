@@ -16,9 +16,16 @@ public class MvcMappingTest {
     }
     @Test
     public void test3(){
-        String uri = "/hello?recipient=world&x=1;y=2";
-        log.info(UrlUtil.getRequestPath(uri));
-        log.info("{}",UrlUtil.getRequestParameters(uri));
+        String uri1 = "/hello?recipient=world&x=1&y=2&z=3";
+        String uri2 = "/hello/123456";
+        String uri3 = "/hello/{id}";
+        String uri4 = "/hello/{id}/getName/{name}";
+        String uri5 = "/hello/132456/getName/zhangaoyu";
+        log.info("uri1解析后的路径:{}",UrlUtil.getRequestPath(uri1));
+        log.info("uri3解析后的路径:{}",UrlUtil.getRequestPath(uri3));
+        log.info("uri1解析后的参数:{}",UrlUtil.getUrlParameterMapForCommon(uri1));
+        log.info("uri2解析后的参数:{}",UrlUtil.getUrlParameterMapForRestFul(uri2,uri3));
+        log.info("uri2解析后的参数:{}",UrlUtil.getUrlParameterMapForRestFul(uri5,uri4));
     }
     @Test
     public void test6(){

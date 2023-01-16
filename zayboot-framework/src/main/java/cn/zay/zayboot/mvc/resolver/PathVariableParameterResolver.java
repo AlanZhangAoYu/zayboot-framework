@@ -16,8 +16,8 @@ public class PathVariableParameterResolver implements ParameterResolver {
     public Object resolve(MappingMethodDetail methodDetail, Parameter parameter) {
         PathVariable pathVariable = parameter.getDeclaredAnnotation(PathVariable.class);
         String requestParameter = pathVariable.value();
-        Map<String, String> urlParameterMappings = methodDetail.getUrlParameterMappings();
-        String requestParameterValue = urlParameterMappings.get(requestParameter);
-        return ObjectUtil.convert(parameter.getType(), requestParameterValue);
+        Map<String, Object> urlParameterMappings = methodDetail.getUrlParameterMap();
+        Object requestParameterValue = urlParameterMappings.get(requestParameter);
+        return ObjectUtil.convert(parameter.getType(), requestParameterValue.toString());
     }
 }
