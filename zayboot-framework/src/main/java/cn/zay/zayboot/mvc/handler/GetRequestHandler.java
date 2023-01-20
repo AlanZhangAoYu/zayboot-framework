@@ -1,27 +1,15 @@
 package cn.zay.zayboot.mvc.handler;
 
-import cn.zay.zayboot.core.ioc.BeanFactory;
 import cn.zay.zayboot.exception.ResourceNotFoundException;
 import cn.zay.zayboot.mvc.FullHttpResponseFactory;
 import cn.zay.zayboot.mvc.MappingMethodDetail;
-import cn.zay.zayboot.mvc.ParameterResolverFactory;
 import cn.zay.zayboot.mvc.RouteMethodFactory;
-import cn.zay.zayboot.mvc.resolver.ParameterResolver;
 import cn.zay.zayboot.util.UrlUtil;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpMethod;
-import io.netty.handler.codec.http.QueryStringDecoder;
-import io.netty.handler.codec.http.multipart.DefaultHttpDataFactory;
-import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import io.netty.handler.codec.http.multipart.InterfaceHttpData;
-import io.netty.handler.codec.http.multipart.MemoryAttribute;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.CharEncoding;
-import org.apache.commons.codec.Charsets;
-
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -49,13 +37,14 @@ public class GetRequestHandler implements RequestHandler {
         //在 REQUEST_METHOD_MAP中获取到对应的 Controller方法
         Method targetMethod = getMethodByUri(requestUri);
         if (targetMethod == null) {
-            throw new ResourceNotFoundException("请求的资源["+requestUri+"]不存在");
+            throw new ResourceNotFoundException("请求的资源["+requestUri+"]不存在, 请检查url或请求类型是否错误");
         }
         log.debug("请求uri:{} -> 对应方法:{}",UrlUtil.getRequestPath(requestUri), targetMethod.getName());
         //获取请求 url中携带的参数
         Map<String,Object> uriParam = getUrlParam(requestUri);
         //获取请求体中携带的参数
         Map<String,Object> bodyParam = UrlUtil.getPostRequestParams(fullHttpRequest);
+        //生成 MappingMethodDetail对象并执行后台方法
         MappingMethodDetail methodDetail = new MappingMethodDetail(targetMethod,uriParam,bodyParam);
         Object runResult = methodDetail.run();
         //这里可能有问题

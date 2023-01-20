@@ -6,6 +6,7 @@ import io.netty.handler.codec.http.multipart.DefaultHttpDataFactory;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 import io.netty.handler.codec.http.multipart.MemoryAttribute;
+import io.netty.util.CharsetUtil;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.codec.Charsets;
 
@@ -94,13 +95,22 @@ public class UrlUtil {
     /**
      * <p>从 uri的请求体中获取参数</p>
      * <p>Post请求</p>
+     * <p>参考: https://blog.csdn.net/IUNIQUE/article/details/121654131</p>
      * @param request Netty封装的请求
      * @return 参数键值对映射
      */
     public static Map<String, Object> getPostRequestParams(FullHttpRequest request) {
+        Map<String, Object> params = new HashMap<>(16);
+        //对于 Content-Type为 application/json的类型获取请求体 body的信息
+        String content = request.content().toString(CharsetUtil.UTF_8);
+        HashMap<String,Object> deserialize = JsonUtil.deserialize(content, HashMap.class);
+        if(deserialize != null){
+            params.putAll(deserialize);
+        }
+        //对于 Content-Type为 x-www-form-urlencoded的类型, body返回的是一个如下的一个字符串: "key1=value1&key2=value2",
+        //需要手动解析
         HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(new DefaultHttpDataFactory(false), request);
         List<InterfaceHttpData> httpPostData = decoder.getBodyHttpDatas();
-        Map<String, Object> params = new HashMap<>(16);
         for (InterfaceHttpData data : httpPostData) {
             if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute) {
                 MemoryAttribute attribute = (MemoryAttribute) data;
