@@ -37,23 +37,30 @@ public class MappingMethodDetail {
         this.queryParameterMap = queryParameterMap;
     }
     /**
-     * 运行该 method的方法
-     * @return
+     * <p>解析 @RequestBody, @RequestParam, @PathVariable等注解</p>
+     * <p>注入参数</p>
+     * <p>运行该 method的方法</p>
+     * @return 方法执行后的返回值, 如果没有返回值, 返回 -0xffffff, 这么设计不知道有没有问题......
      */
     public Object run(){
         //获取当前方法所属的对象
         String beanName = BeanFactory.getBeanName(this.getMethod().getDeclaringClass());
         Object targetObject = BeanFactory.BEANS.get(beanName);
-        //获取当前方法的参数, 保存在 methodParamList中
+        //获取整合后的 map
+        Map<String,Object> paramMap = handleParamMap(urlParameterMap,queryParameterMap);
+        //获取当前方法要执行所需要的参数, 保存在 methodParamList中
         List<Object> methodParamList = new ArrayList<>();
-        if(!urlParameterMap.isEmpty()){
-            for (String s : urlParameterMap.keySet()) {
-                methodParamList.add(urlParameterMap.get(s));
+        for (Parameter parameter : this.method.getParameters()) {
+            ParameterResolver parameterResolver = ParameterResolverFactory.get(parameter);
+            if(parameterResolver == null){
+                throw new IllegalArgumentException("该参数["+parameter+"]未指定注入参数!!");
             }
-        }
-        if(!queryParameterMap.isEmpty()){
-            for (String s : queryParameterMap.keySet()) {
-                methodParamList.add(queryParameterMap.get(s));
+            if(!paramMap.isEmpty()){
+                Object resolve = parameterResolver.resolve(parameter, paramMap);
+                if(resolve == null){
+                    throw new IllegalArgumentException("该参数["+parameter+"]注入出错!!");
+                }
+                methodParamList.add(resolve);
             }
         }
         if (this.method.getReturnType() == void.class) {
@@ -64,6 +71,23 @@ public class MappingMethodDetail {
             //如果 targetMethod的返回类型不为 void (一般大多都会执行这个分支)
             return ReflectionUtil.executeTargetMethod(targetObject, method, methodParamList.toArray());
         }
+    }
+
+    /**
+     * <p>将 urlParameterMap与 queryParameterMap中的参数处理为一个 map,不能保证用户传过来些啥,处理后的参数尽量保证可以被执行</p>
+     * <p>比如如果两个 map中存在重复的参数, 抛异常提醒用户</p>
+     * <p>还有啥没想到的?? 再说</p>
+     */
+    private Map<String,Object> handleParamMap(Map<String, Object> urlParameterMap,Map<String, Object> queryParameterMap){
+        for (String s : urlParameterMap.keySet()) {
+            if(queryParameterMap.containsKey(s)){
+                throw new IllegalArgumentException("url与请求体中存在重复参数, 请排查!");
+            }
+        }
+        Map<String, Object> paramMap = new HashMap<>(16);
+        paramMap.putAll(urlParameterMap);
+        paramMap.putAll(queryParameterMap);
+        return paramMap;
     }
 }
 

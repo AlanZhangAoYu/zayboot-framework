@@ -13,11 +13,13 @@ import java.util.Map;
  */
 public class PathVariableParameterResolver implements ParameterResolver {
     @Override
-    public Object resolve(MappingMethodDetail methodDetail, Parameter parameter) {
+    public Object resolve(Parameter parameter, Map<String,Object> map) {
         PathVariable pathVariable = parameter.getDeclaredAnnotation(PathVariable.class);
         String requestParameter = pathVariable.value();
-        Map<String, Object> urlParameterMappings = methodDetail.getUrlParameterMap();
-        Object requestParameterValue = urlParameterMappings.get(requestParameter);
+        Object requestParameterValue = map.get(requestParameter);
+        if(requestParameterValue == null){
+            throw new RuntimeException("未找到参数["+requestParameter+"], 无法注入");
+        }
         return ObjectUtil.convert(parameter.getType(), requestParameterValue.toString());
     }
 }

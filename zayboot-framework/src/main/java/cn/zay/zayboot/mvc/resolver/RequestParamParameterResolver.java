@@ -5,6 +5,7 @@ import cn.zay.zayboot.mvc.MappingMethodDetail;
 import cn.zay.zayboot.util.ObjectUtil;
 
 import java.lang.reflect.Parameter;
+import java.util.Map;
 
 /**
  * process @RequestParam annotation
@@ -14,15 +15,13 @@ import java.lang.reflect.Parameter;
  **/
 public class RequestParamParameterResolver implements ParameterResolver {
     @Override
-    public Object resolve(MappingMethodDetail methodDetail, Parameter parameter) {
+    public Object resolve(Parameter parameter, Map<String,Object> map) {
         RequestParam requestParam = parameter.getDeclaredAnnotation(RequestParam.class);
         String requestParameter = requestParam.value();
-        String requestParameterValue = (String) methodDetail.getQueryParameterMap().get(requestParameter);
+        Object requestParameterValue = map.get(requestParameter);
         if (requestParameterValue == null) {
-            throw new IllegalArgumentException("The specified parameter " + requestParameter + " can not be null!");
+            throw new RuntimeException("未找到参数["+requestParameter+"], 无法注入");
         }
-        // convert the parameter to the specified type
-        return ObjectUtil.convert(parameter.getType(), requestParameterValue);
-
+        return ObjectUtil.convert(parameter.getType(), requestParameterValue.toString());
     }
 }
