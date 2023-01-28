@@ -2,16 +2,11 @@ package cn.zay.zayboot.mvc;
 
 import cn.zay.zayboot.core.ioc.BeanFactory;
 import cn.zay.zayboot.mvc.resolver.ParameterResolver;
-import cn.zay.zayboot.util.ObjectUtil;
 import cn.zay.zayboot.util.ReflectionUtil;
-import cn.zay.zayboot.util.UrlUtil;
-import io.netty.handler.codec.http.HttpMethod;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * 对一个请求地址 uri与其对应的 controller方法的封装
@@ -64,12 +59,12 @@ public class MappingMethodDetail {
             }
         }
         if (this.method.getReturnType() == void.class) {
-            //如果 targetMethod的返回类型为 void
+            //如果 targetMethod的返回类型为 void (一般都不会执行这个分支)
             ReflectionUtil.executeTargetMethodNoResult(targetObject, this.method, methodParamList.toArray());
             return "-0xffffff";
         } else {
             //如果 targetMethod的返回类型不为 void (一般大多都会执行这个分支)
-            return ReflectionUtil.executeTargetMethod(targetObject, method, methodParamList.toArray());
+            return ReflectionUtil.executeTargetMethod(targetObject, this.method, methodParamList.toArray());
         }
     }
 

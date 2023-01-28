@@ -43,6 +43,7 @@ public class GetRequestHandler implements RequestHandler {
         //获取请求 url中携带的参数
         Map<String,Object> uriParam = getUrlParam(requestUri);
         //获取请求体中携带的参数
+        //get请求可不可以携带请求体???????参考: https://zhuanlan.zhihu.com/p/456921996
         Map<String,Object> bodyParam = UrlUtil.getPostRequestParams(fullHttpRequest);
         //生成 MappingMethodDetail对象并执行后台方法
         MappingMethodDetail methodDetail = new MappingMethodDetail(targetMethod,uriParam,bodyParam);

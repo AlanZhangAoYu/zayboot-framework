@@ -32,6 +32,12 @@
             <artifactId>example-starter</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <!--这里引入 redis的 starter, 用来测试框架是否能接入(自动装配)现有的工具, 与 Springboot无缝接轨-->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>2.7.5</version>
+        </dependency>-->
     </dependencies>
     <build>
         <plugins>
