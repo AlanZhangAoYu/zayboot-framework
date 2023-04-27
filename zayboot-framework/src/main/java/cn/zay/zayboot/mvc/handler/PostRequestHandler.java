@@ -1,29 +1,18 @@
 package cn.zay.zayboot.mvc.handler;
 
-import cn.zay.zayboot.core.ioc.BeanFactory;
 import cn.zay.zayboot.exception.ResourceNotFoundException;
 import cn.zay.zayboot.mvc.FullHttpResponseFactory;
 import cn.zay.zayboot.mvc.MappingMethodDetail;
-import cn.zay.zayboot.mvc.ParameterResolverFactory;
 import cn.zay.zayboot.mvc.RouteMethodFactory;
-import cn.zay.zayboot.mvc.resolver.ParameterResolver;
 import cn.zay.zayboot.util.UrlUtil;
-import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
-import io.netty.handler.codec.http.multipart.DefaultHttpDataFactory;
-import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import io.netty.handler.codec.http.multipart.InterfaceHttpData;
-import io.netty.handler.codec.http.multipart.MemoryAttribute;
-import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.CharEncoding;
-import org.apache.commons.codec.Charsets;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**

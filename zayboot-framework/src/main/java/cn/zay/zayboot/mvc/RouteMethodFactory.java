@@ -33,7 +33,8 @@ public class RouteMethodFactory {
      */
     private static final Map<HttpMethod, Map<String, Method>> REQUEST_METHOD_MAP = new HashMap<>(2);
     /**
-     * 该 Map中存的是用 UriUtil.formatUrl()转换后的 uri与转换前的 uri的映射关系, 为了处理 RestFul格式的 uri真的做了太多太多……
+     * 该 Map中存的是用 UriUtil.formatUrl()转换后的 uri与转换前的 uri的映射关系, 用来找到原来用户在@GetMapping或@PostMapping中设置的值
+     * 为了处理 RestFul格式的 uri真的做了太多太多……
      */
     private static final Map<HttpMethod, Map<String, String>> REQUEST_URL_MAP = new HashMap<>(2);
     static {
@@ -58,6 +59,7 @@ public class RouteMethodFactory {
                 if (method.isAnnotationPresent(GetMapping.class)) {
                     GetMapping getMapping = method.getAnnotation(GetMapping.class);
                     if (getMapping != null) {
+                        //将get请求url与对应Controller方法映射, 并存放到 REQUEST_METHOD_MAP中
                         mapUrlToMethod(UrlUtil.formatUrl(baseUrl + getMapping.value()), method, HttpMethod.GET);
                         REQUEST_URL_MAP.get(HttpMethod.GET)
                                 .put(UrlUtil.formatUrl(baseUrl + getMapping.value()),baseUrl + getMapping.value());
@@ -66,6 +68,7 @@ public class RouteMethodFactory {
                 if (method.isAnnotationPresent(PostMapping.class)) {
                     PostMapping postMapping = method.getAnnotation(PostMapping.class);
                     if (postMapping != null) {
+                        //将post请求url与对应Controller方法映射, 并存放到 REQUEST_METHOD_MAP中
                         mapUrlToMethod(UrlUtil.formatUrl(baseUrl + postMapping.value()), method, HttpMethod.POST);
                         REQUEST_URL_MAP.get(HttpMethod.POST)
                                 .put(UrlUtil.formatUrl(baseUrl + postMapping.value()),baseUrl + postMapping.value());

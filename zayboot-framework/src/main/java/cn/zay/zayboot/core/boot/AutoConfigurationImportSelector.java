@@ -1,6 +1,6 @@
 package cn.zay.zayboot.core.boot;
 
-import cn.zay.zayboot.annotation.boot.AutomaticAnjection;
+import cn.zay.zayboot.annotation.boot.ZayBootApplication;
 import java.net.URL;
 import java.util.List;
 
@@ -16,10 +16,10 @@ public class AutoConfigurationImportSelector {
     private static final String[] NO_IMPORTS = new String[0];
     /**
      * 获取所有符合条件的类的全限定类名，这些类需要被加载到 IoC容器中(调用 BeanFactory.loadClass())
-     * @return 需要加载到容器中的类的全限定类名的集合
+     * @return 需要加载到 BEANS容器中的类的全限定类名的集合
      */
     public static String[] selectImports(Class<?> applicationClass){
-        if(!applicationClass.isAnnotationPresent(AutomaticAnjection.class)){
+        if(!applicationClass.isAnnotationPresent(ZayBootApplication.class)){
             return NO_IMPORTS;
         }
         return getCandidateConfigurations(applicationClass).toArray(new String[0]);

@@ -81,6 +81,7 @@ public final class BeanFactory {
      * @param packageName @ComponentScan扫描的包路径组
      */
     public static void automaticInjection(String[] packageName) throws Exception{
+        //加载自动注入初始化器, 为执行注入方法initialize做准备
         AutowiredBeanInitialization autowiredBeanInitialization=new AutowiredBeanInitialization(packageName);
         ConfigurationManager configurationManager =new ConfigurationManager();
         List<Path> pathList=new ArrayList<>();
