@@ -30,7 +30,7 @@ public class InternallyAspectInterceptor extends Interceptor{
      */
     private void init() throws Exception{
         for (String s : InterceptorFactory.BEFORE_METHODS_MAP.keySet()) {
-            for (String beforePointcut : InterceptorFactory.BEFORE_METHODS_MAP.get(s).getBeforePointcuts()) {
+            for (String beforePointcut : InterceptorFactory.BEFORE_METHODS_MAP.get(s).getPointcuts()) {
                 if(InterceptorFactory.POINTCUT_METHODS_MAP.get(beforePointcut) != null){
                     if((methodInvocation.getTargetObject().getClass().getName()+"."+
                             methodInvocation.getTargetMethod().getName()).equals(beforePointcut)){
@@ -42,7 +42,7 @@ public class InternallyAspectInterceptor extends Interceptor{
             }
         }
         for (String s : InterceptorFactory.AFTER_METHODS_MAP.keySet()) {
-            for (String beforePointcut : InterceptorFactory.AFTER_METHODS_MAP.get(s).getBeforePointcuts()) {
+            for (String beforePointcut : InterceptorFactory.AFTER_METHODS_MAP.get(s).getPointcuts()) {
                 if(InterceptorFactory.POINTCUT_METHODS_MAP.get(beforePointcut) != null){
                     if((methodInvocation.getTargetObject().getClass().getName()+"."+
                             methodInvocation.getTargetMethod().getName()).equals(beforePointcut)){

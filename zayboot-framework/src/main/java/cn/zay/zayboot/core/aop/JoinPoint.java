@@ -2,7 +2,6 @@ package cn.zay.zayboot.core.aop;
 
 /**
  * @author ZAY
- * 切点的实现类
  */
 public class JoinPoint{
     /**
@@ -22,7 +21,7 @@ public class JoinPoint{
     public MethodInvocation getMethodInvocation() {
         return methodInvocation;
     }
-    public String[] getBeforePointcuts() {
+    public String[] getPointcuts() {
         return pointcuts;
     }
 }
